@@ -9,86 +9,61 @@ namespace cipher
 {
     public class Statistics
     {
-
+//-----------------------fields-------------------------------------------------------
        // private SortedList<char, int> _letterFreq;
-        private List<StringIntPair> _oneLetterWordsSorted;
+
         private SortedList<char, int> _letterAppearances;
         private List<CharIntPair> _letterAppearancesSorted;
         private SortedList<char, int> _possiblyCapital;
+        private List<CharIntPair> _possiblyCapitalSorted;
         private SortedList<String, int> _twoLetterWords;
         private List<StringIntPair> _twoLetterWordsSorted;
         private SortedList<String, int> _threeLetterWords;
+        private List<StringIntPair> _threeLetterWordsSorted;
         private SortedList<String, int> _oneLetterWords;
+        private List<StringIntPair> _oneLetterWordsSorted;
         private SortedList<String, int> _lastThreeLetters;
-
-
+        private String _filename;
+//----------------------getters/setters------------------------------------------------
+        public List<CharIntPair> PossiblyCapitalSorted
+        {
+            get { return _possiblyCapitalSorted; }
+        }
+        public List<StringIntPair> ThreeLetterWordsSorted
+        {
+            get { return _threeLetterWordsSorted; }
+        }
         public List<StringIntPair> TwoLetterWordsSorted
         {
             get { return _twoLetterWordsSorted; }
-            set { _twoLetterWordsSorted = value; }
         }
         public List<StringIntPair> OneLetterWordsSorted
         {
             get { return _oneLetterWordsSorted; }
-            set { _oneLetterWordsSorted = value; }
         }
 
         public List<CharIntPair> LetterAppearancesSorted
         {
             get { return _letterAppearancesSorted; }
-            set { _letterAppearancesSorted = value; }
-        }
-
-        public SortedList<char, int> LetterAppearances
-        {
-            get { return _letterAppearances; }
-            set { _letterAppearances = value; }
-        }
-
-        public SortedList<String, int> TwoLetterWords
-        {
-            get { return _twoLetterWords; }
-            set { _twoLetterWords = value; }
         }
 
 
-        public SortedList<String, int> LastThreeLetters
-        {
-            get { return _lastThreeLetters; }
-            set { _lastThreeLetters = value; }
-        }
 
-
-        public SortedList<String, int> ThreeLetterWords
-        {
-            get { return _threeLetterWords; }
-            set { _threeLetterWords = value; }
-        }
-
-
-        public SortedList<String, int> OneLetterWords
-        {
-            get { return _oneLetterWords; }
-            set { _oneLetterWords = value; }
-        }
-
-        public SortedList<char, int> PossiblyCapital
-        {
-            get { return _possiblyCapital; }
-            set { _possiblyCapital = value; }
-        }
-        public Statistics()
+        public Statistics(String filename)
         {
             //this._letterFreq = initFreq();
+            this._filename = filename;
             this._letterAppearances = new SortedList<char, int>();
             this._letterAppearancesSorted = new List<CharIntPair>();
             this._twoLetterWords = new SortedList<String, int>();
             this._threeLetterWords = new SortedList<String, int>();
             this._lastThreeLetters = new SortedList<String, int>();
             this._possiblyCapital = new SortedList<char,int>();
+            this._possiblyCapitalSorted = new List<CharIntPair>();
             this._oneLetterWords = new SortedList<string, int>();
             this._oneLetterWordsSorted = new List<StringIntPair>();
             this._twoLetterWordsSorted = new List<StringIntPair>();
+            initStatistics(this._filename);
         }
 
         public SortedList<char, int> initFreq()
@@ -99,7 +74,7 @@ namespace cipher
             return res;
         }
 
-        public void getStatsFromFile(String filename)
+        public void initStatistics(String filename)
         {
             
             TextReader tr = new StreamReader(filename);
@@ -134,7 +109,12 @@ namespace cipher
                     oneLetterWordCheck(word);
                 }
             }
+            //sort all the statistics by appearances
+            this._twoLetterWordsSorted = sortByValue(this._twoLetterWords);
             this._letterAppearancesSorted = this.sortByValue(this._letterAppearances);
+            this._oneLetterWordsSorted = sortByValue(this._oneLetterWords);
+            this._threeLetterWordsSorted = sortByValue(this._threeLetterWords);
+            this._possiblyCapitalSorted = sortByValue(this._possiblyCapital);
             
         }
         private void checkLast3Letters(String word)
@@ -168,7 +148,7 @@ namespace cipher
                     this._oneLetterWords[word]++;
                 }
             }
-            this._oneLetterWordsSorted = sortByValue(this.OneLetterWords);
+
 
         }
         private void twoLetterWordsCheck(String word)
@@ -185,7 +165,7 @@ namespace cipher
                     this._twoLetterWords[word]++;
                 }
             }
-            this._twoLetterWordsSorted = sortByValue(this._twoLetterWords);
+
         }
         private void threeLetterWordsCheck(String word)
         {

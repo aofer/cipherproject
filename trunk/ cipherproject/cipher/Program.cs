@@ -13,9 +13,6 @@ namespace cipher
 
         static void Main(string[] args)
         {
-            Console.WriteLine("decrypting!!\n");
-            Statistics c = new Statistics();
-            
             try
             {
                 String fileName = args[0];
@@ -24,30 +21,14 @@ namespace cipher
                     fileName = fileName + " " + args[i];
                 }
                 Console.WriteLine(fileName);
+                Statistics c = new Statistics(fileName);
                 
-                Console.WriteLine("done!\n");
-                c.getStatsFromFile(fileName);
-                c.PrintKeysAndValues(c.LetterAppearances);
-                Console.WriteLine("second print");
-                int counter = 0;
-                foreach (CharIntPair letAp in c.LetterAppearancesSorted)
-                {
-                    counter++;
-                    Console.WriteLine(" {0} : letter: {1}  ,appearances: {2}",counter, letAp.Key, letAp.Value);
-                }
-                String temp = "word word2 word3";
-                String[] temp2 = temp.Split();
-                foreach (String str in temp2)
-                {
-                    Console.WriteLine(str);
-                }
-                
-                foreach (KeyValuePair<String,int> word in c.TwoLetterWords)
+                foreach (StringIntPair word in c.TwoLetterWordsSorted)
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.",word.Key,word.Value);
                 }
                 Console.ReadLine();
-                foreach (KeyValuePair<String, int> word in c.ThreeLetterWords)
+                foreach (StringIntPair word in c.ThreeLetterWordsSorted)
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
@@ -55,11 +36,13 @@ namespace cipher
               //  {
               //      Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
               //  }
-                foreach (KeyValuePair<String, int> word in c.OneLetterWords)
+                Console.ReadLine();
+                foreach (StringIntPair word in c.OneLetterWordsSorted)
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
-                foreach (KeyValuePair<char, int> ch in c.PossiblyCapital)
+                Console.ReadLine();
+                foreach (CharIntPair ch in c.PossiblyCapitalSorted)
                 {
                     Console.WriteLine("letter is: {0} , appears {1} times.", ch.Key, ch.Value);
                 }
