@@ -64,7 +64,9 @@ namespace cipher
         public void addOneLetterWord()
         {
             this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
+            this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
             this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
+            this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
    
         }
 
@@ -75,14 +77,18 @@ namespace cipher
             if (getKeyByValue(this._encryptionKey,mostCommon[0]) == 't')
             {
                 this._encryptionKey.Add('o', mostCommon[1]);
+                this._remainingLetters.Remove(mostCommon[1]);
                 if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 'o')
                     this._encryptionKey.Add('f', secondCommon[1]);
+                    this._remainingLetters.Remove(secondCommon[1]);
             }
             else if (getKeyByValue(this._encryptionKey, mostCommon[0]) == 'o')
             {
                 this._encryptionKey.Add('f', mostCommon[1]);
+                this._remainingLetters.Remove(mostCommon[1]);
                 if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 't')
                     this._encryptionKey.Add('o', secondCommon[1]);
+                    this._remainingLetters.Remove(secondCommon[1]);
             }
            
             String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
