@@ -25,7 +25,7 @@ namespace cipher
                 
                 foreach (StringIntPair word in c.TwoLetterWordsSorted)
                 {
-                    Console.WriteLine("word is: {0} , appears {1} times.",word.Key,word.Value);
+                    Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
                 Console.ReadLine();
                 foreach (StringIntPair word in c.ThreeLetterWordsSorted)
@@ -58,15 +58,17 @@ namespace cipher
                 Analysis test = new Analysis(c);
                 test.addLetterFreq();
                 test.addOneLetterWord();
+                test.encrypeTwoLetterWord();
+               
                 test.encrypteByPossibilities();
+                
                 test.randomFill();
                 Console.WriteLine("The table is : \n {0}",test.Table.ToString());
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
-                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key2.txt", test.printKey()));
-
-           
+                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
+               // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
                 
             }
             catch (IOException e)
