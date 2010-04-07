@@ -14,17 +14,33 @@ namespace cipher
 
         private SortedList<char, int> _letterAppearances;
         private List<CharIntPair> _letterAppearancesSorted;
+        
         private SortedList<char, int> _possiblyCapital;
         private List<CharIntPair> _possiblyCapitalSorted;
+        
         private SortedList<String, int> _twoLetterWords;
         private List<StringIntPair> _twoLetterWordsSorted;
+        
         private SortedList<String, int> _threeLetterWords;
         private List<StringIntPair> _threeLetterWordsSorted;
+        
         private SortedList<String, int> _oneLetterWords;
         private List<StringIntPair> _oneLetterWordsSorted;
+
         private SortedList<String, int> _lastThreeLetters;
+        private List<StringIntPair> _lastThreeLettersSorted;
+
+        private SortedList<String, int> _bigrams;
+        private List<StringIntPair> _bigramsSorted;
+
         private String _filename;
 //----------------------getters/setters------------------------------------------------
+
+        public List<StringIntPair> LastThreeLettersSorted
+        {
+            get { return _lastThreeLettersSorted; }
+            set { _lastThreeLettersSorted = value; }
+        }
         public List<CharIntPair> PossiblyCapitalSorted
         {
             get { return _possiblyCapitalSorted; }
@@ -58,6 +74,7 @@ namespace cipher
             this._twoLetterWords = new SortedList<String, int>();
             this._threeLetterWords = new SortedList<String, int>();
             this._lastThreeLetters = new SortedList<String, int>();
+            this.LastThreeLettersSorted = new List<StringIntPair>();
             this._possiblyCapital = new SortedList<char,int>();
             this._possiblyCapitalSorted = new List<CharIntPair>();
             this._oneLetterWords = new SortedList<string, int>();
@@ -115,20 +132,21 @@ namespace cipher
             this._oneLetterWordsSorted = sortByValue(this._oneLetterWords);
             this._threeLetterWordsSorted = sortByValue(this._threeLetterWords);
             this._possiblyCapitalSorted = sortByValue(this._possiblyCapital);
-            
+            this._lastThreeLettersSorted = sortByValue(this._lastThreeLetters);
         }
         private void checkLast3Letters(String word)
         {
             Regex last3Letters = new Regex("[a-zA-Z]{3}$");
-            if (last3Letters.IsMatch(word))
+            if (last3Letters.IsMatch(word) && word.Length > 3)
             {
-                if (!this._lastThreeLetters.ContainsKey(word))
+                String ending = word.Substring(word.Length - 3, 3);
+                if (!this._lastThreeLetters.ContainsKey(ending))
                 {
-                    this._lastThreeLetters.Add(word, 1);
+                    this._lastThreeLetters.Add(ending, 1);
                 }
                 else
                 {
-                    this._lastThreeLetters[word]++;
+                    this._lastThreeLetters[ending]++;
                 }
             }
         }
@@ -240,6 +258,9 @@ namespace cipher
         private bool checkIfLetter(char ch)
         {
             return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+        }
+        private void getNGram(String word,int length){
+
         }
 
     }

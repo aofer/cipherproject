@@ -32,10 +32,17 @@ namespace cipher
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
-              //  foreach (KeyValuePair<String, int> word in c._lastThreeLetters)
-              //  {
-              //      Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
-              //  }
+                Console.ReadLine();
+                int counter = 0;
+                foreach (StringIntPair word in c.LastThreeLettersSorted)
+                {
+                    Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
+                    if (counter++ > 100)
+                    {
+                        break;
+                    }
+
+                }
                 Console.ReadLine();
                 foreach (StringIntPair word in c.OneLetterWordsSorted)
                 {
