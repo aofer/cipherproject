@@ -75,19 +75,16 @@ namespace cipher
             if (getKeyByValue(this._encryptionKey,mostCommon[0]) == 't')
             {
                 this._encryptionKey.Add('o', mostCommon[1]);
+                if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 'o')
+                    this._encryptionKey.Add('f', secondCommon[1]);
             }
-            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 't')
+            else if (getKeyByValue(this._encryptionKey, mostCommon[0]) == 'o')
             {
-                this._encryptionKey.Add('o', secondCommon[1]);
+                this._encryptionKey.Add('f', mostCommon[1]);
+                if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 't')
+                    this._encryptionKey.Add('o', secondCommon[1]);
             }
-            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 'o')
-            {
-                this._encryptionKey.Add('f', secondCommon[1]);
-            }
-            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 'o')
-            {
-                this._encryptionKey.Add('f', secondCommon[1]);
-            }
+           
             String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
             for (int i = 0; i < 5; i++)
             {
