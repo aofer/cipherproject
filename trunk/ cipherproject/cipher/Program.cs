@@ -74,7 +74,7 @@ namespace cipher
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
-                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
+                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key2.txt", test.printKey()));
 
            
                 

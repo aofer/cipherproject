@@ -32,12 +32,19 @@ namespace cipher
             initLetters();
         }
 
+        /**
+         * Init the remaining letter list
+         */
         private void initLetters(){
             for (char c = 'a'; c <= 'z'; c++)
                 this._remainingLetters.Add(c);
             for (char c = 'A'; c <= 'Z'; c++)
                 this._remainingLetters.Add(c);
         }
+
+        /**
+         * adding letters to the possiblilities table by their frequency
+         */
         public void addLetterFreq()
         {
             char[]  freqArr= { 'a', 'o', 'i', 'n', 's', 'h', 'r', 'd'};
@@ -51,12 +58,16 @@ namespace cipher
             }    
         }
 
+        /**
+         * encrpte one l etter word
+         */
         public void addOneLetterWord()
         {
             this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
             this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
    
         }
+
         /**
          * prints the substitutions
          */ 
@@ -115,6 +126,10 @@ namespace cipher
             }
             return res;
         }
+
+        /**
+         * Calculate our grade
+         */
         public float calcGrade(String fileName, String key)
         {
             float grade = 0;
@@ -138,20 +153,29 @@ namespace cipher
             return grade;
         }
 
+        /**
+         * fill the encryption key by the possibilities table
+         */
         public void encrypteByPossibilities()
         {
             for (char c = 'a'; c <= 'z'; c++)
             {
                 if (!this._encryptionKey.ContainsKey(c))
                     if (mostPossibleLetter(this.Table.Table[c]) != '?')
+                    {
                         this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
+                        this._remainingLetters.Remove(mostPossibleLetter(this.Table.Table[c]));
+                    }
             }
 
             for (char c = 'A'; c <= 'Z'; c++)
             {
                 if (!this._encryptionKey.ContainsKey(c))
                     if (mostPossibleLetter(this.Table.Table[c]) != '?')
-                    this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
+                    {
+                        this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
+                        this._remainingLetters.Remove(mostPossibleLetter(this.Table.Table[c]));
+                    }
             }
 
         }
