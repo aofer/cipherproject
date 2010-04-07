@@ -138,5 +138,45 @@ namespace cipher
             return grade;
         }
 
+        public void encrypteByPossibilities()
+        {
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                if (!this._encryptionKey.ContainsKey(c))
+                    if (mostPossibleLetter(this.Table.Table[c]) != '?')
+                        this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
+            }
+
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                if (!this._encryptionKey.ContainsKey(c))
+                    if (mostPossibleLetter(this.Table.Table[c]) != '?')
+                    this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
+            }
+
+        }
+
+        public char mostPossibleLetter(SortedList<char,int> gradingList)
+        {
+            int maxGrade = 0;
+            char res='~';
+            if (gradingList.Count == 0)
+            {
+                res = '?';
+            }
+            else
+            {
+                foreach (KeyValuePair<char, int> kvp in gradingList)
+                {
+                    if (kvp.Value > maxGrade)
+                    {
+                        maxGrade = kvp.Value;
+                        res = kvp.Key;
+                    }
+                }
+            }
+            return res;
+        }
+
     }
 }

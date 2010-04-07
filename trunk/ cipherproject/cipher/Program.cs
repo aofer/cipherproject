@@ -68,12 +68,13 @@ namespace cipher
                 Analysis test = new Analysis(c);
                 test.addLetterFreq();
                 test.addOneLetterWord();
+                test.encrypteByPossibilities();
                 test.randomFill();
                 Console.WriteLine("The table is : \n {0}",test.Table.ToString());
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
-                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt",test.printKey()));
+                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
 
            
                 
