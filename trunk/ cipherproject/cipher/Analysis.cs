@@ -68,6 +68,34 @@ namespace cipher
    
         }
 
+        public void encrypeTwoLetterWord()
+        {
+            String[] freqArr = { "to", "of", "in", "it", "is", "be", "as", "at", "so", "we"};
+            for (int i = 0; i < 5; i++)
+            {
+                String word = this._statistics.TwoLetterWordsSorted[i].Key;
+                if (this._encryptionKey.ContainsValue(word[0]))
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        //Console.WriteLine("key is: {0}", this._encryptionKey.ElementAt(this._encryptionKey.IndexOfValue(word[0])).Key);
+                        if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[i][0])
+                        {
+                            this._table.increaseGrade(freqArr[i][1], word[1], 7);
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public char getKeyByValue(SortedList<char, char>  lst,char c){
+            int index = lst.IndexOfValue(c);
+            return lst.ElementAt<KeyValuePair<char, char>>(index).Key;
+        }
+
+
         /**
          * prints the substitutions
          */ 
