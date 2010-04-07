@@ -70,13 +70,31 @@ namespace cipher
 
         public void encrypeTwoLetterWord()
         {
-            String[] freqArr = { "to", "of", "in", "it", "is", "be", "as", "at", "so", "we"};
+            String mostCommon = this._statistics.TwoLetterWordsSorted[0].Key;
+            String secondCommon = this._statistics.TwoLetterWordsSorted[1].Key;
+            if (getKeyByValue(this._encryptionKey,mostCommon[0]) == 't')
+            {
+                this._encryptionKey.Add('o', mostCommon[1]);
+            }
+            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 't')
+            {
+                this._encryptionKey.Add('o', secondCommon[1]);
+            }
+            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 'o')
+            {
+                this._encryptionKey.Add('f', secondCommon[1]);
+            }
+            else if (getKeyByValue(this._encryptionKey,secondCommon[0]) == 'o')
+            {
+                this._encryptionKey.Add('f', secondCommon[1]);
+            }
+            String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
             for (int i = 0; i < 5; i++)
             {
                 String word = this._statistics.TwoLetterWordsSorted[i].Key;
                 if (this._encryptionKey.ContainsValue(word[0]))
                 {
-                    for (int j = 0; j < 10; j++)
+                    for (int j = 0; j < 8; j++)
                     {
                         //Console.WriteLine("key is: {0}", this._encryptionKey.ElementAt(this._encryptionKey.IndexOfValue(word[0])).Key);
                         if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[i][0])
