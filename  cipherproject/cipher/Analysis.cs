@@ -55,22 +55,27 @@ namespace cipher
             this._remainingLetters.Remove(this._statistics.LetterAppearancesSorted[1].Key);
             for (int i = 2; i < 10; i++)
             {
-                this._table.increaseGrade(freqArr[i-2], this._statistics.LetterAppearancesSorted[i].Key, 5);
+                this._table.increaseGrade(freqArr[i-2], this._statistics.LetterAppearancesSorted[i].Key, 1);
             }    
         }
 
         /**
-         * encrpte one l etter word
+         * encrpte one letter word
          */
         public void addOneLetterWord()
         {
             this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
             this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
+            this._table.removeLetterList('a'); //remove the posibilities for letter a
             this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
             this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
+            this._table.removeLetterList('I');
    
         }
 
+        /**
+         * encrpte two letter words
+         */
         public void encrypeTwoLetterWord()
         {
             String mostCommon = this._statistics.TwoLetterWordsSorted[0].Key;
@@ -79,32 +84,66 @@ namespace cipher
             {
                 this._encryptionKey.Add('o', mostCommon[1]);
                 this._remainingLetters.Remove(mostCommon[1]);
+                this._table.removeLetterList('o');
                 if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 'o')
                     this._encryptionKey.Add('f', secondCommon[1]);
                     this._remainingLetters.Remove(secondCommon[1]);
+                    this._table.removeLetterList('f');
             }
             else if (getKeyByValue(this._encryptionKey, mostCommon[0]) == 'o')
             {
                 this._encryptionKey.Add('f', mostCommon[1]);
                 this._remainingLetters.Remove(mostCommon[1]);
+                this._table.removeLetterList('f');
                 if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 't')
                     this._encryptionKey.Add('o', secondCommon[1]);
                     this._remainingLetters.Remove(secondCommon[1]);
+                    this._table.removeLetterList('o');
             }
            
             String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
-            for (int i = 0; i < 5; i++)
+            /*for (int i = 0; i < 6; i++)
+            {
+
+                for (int j = 0; j < freqArr.Length; j++)
+                {
+                    float maxPrec = 0;
+                    WordMatch w = new WordMatch(this._statistics.TwoLetterWordsSorted[i].Key, freqArr[j], _encryptionKey);
+                    float precentage = w.MatchPrecentage;
+                    if (precentage > maxPrec)
+                    {
+                        maxPrec = precentage;
+                        rightWord = w;
+                    }
+                }
+                for (int k = 0; k < rightWord.Subs.Count; k++)
+                {
+                    if(!this._encryptionKey.ContainsKey(rightWord.Subs.ElementAt(i).Key))
+                        this._table.increaseGrade((rightWord.Subs.ElementAt(i)).Key, (rightWord.Subs.ElementAt(i)).Value, 1);
+                }
+                
+            }*/
+            for (int i = 2; i < 9; i++)//8 top two letters 
             {
                 String word = this._statistics.TwoLetterWordsSorted[i].Key;
                 if (this._encryptionKey.ContainsValue(word[0]))
                 {
                     for (int j = 0; j < 8; j++)
-                    {
-                        //Console.WriteLine("key is: {0}", this._encryptionKey.ElementAt(this._encryptionKey.IndexOfValue(word[0])).Key);
-                        if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[i][0])
+                    {          
+                        if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[j][0])
                         {
-                            this._table.increaseGrade(freqArr[i][1], word[1], 7);
-                            break;
+                            this._table.increaseGrade(freqArr[j][1], word[1], 2);
+                        }
+                    }
+
+                }
+                if (this._encryptionKey.ContainsValue(word[1]))
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (this.getKeyByValue(this._encryptionKey, word[1]) == freqArr[j][1])
+                        {
+                            this._table.increaseGrade(freqArr[j][0], word[0], 2);
                         }
                     }
 
@@ -112,6 +151,10 @@ namespace cipher
             }
         }
 
+
+        /**
+         * returns the key by its value
+         */ 
         public char getKeyByValue(SortedList<char, char>  lst,char c){
             int index = lst.IndexOfValue(c);
             return lst.ElementAt<KeyValuePair<char, char>>(index).Key;
