@@ -12,6 +12,7 @@ namespace cipher
         private Statistics _statistics;
         private SortedList<char, char> _encryptionKey;
         private List<char> _remainingLetters;
+
         public SortedList<char, char> EncryptionKey
         {
             get { return _encryptionKey; }

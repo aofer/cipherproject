@@ -22,7 +22,7 @@ namespace cipher
                 }
                 Console.WriteLine(fileName);
                 Statistics c = new Statistics(fileName);
-                
+                int counter = 0;
                 foreach (StringIntPair word in c.TwoLetterWordsSorted)
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
@@ -33,7 +33,25 @@ namespace cipher
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
                 Console.ReadLine();
-                int counter = 0;
+                foreach (StringIntPair word in c.BigramsSorted)
+                {
+                    if (counter++ > 30)
+                    {
+                        break;
+                    }
+                    Console.WriteLine("Bigram is: {0} , appears {1} times.", word.Key, word.Value);
+                }
+                Console.ReadLine();
+                foreach (StringIntPair word in c.TrigramsSorted)
+                {
+                    if (counter++ > 30)
+                    {
+                        break;
+                    }
+                    Console.WriteLine("Trigram is: {0} , appears {1} times.", word.Key, word.Value);
+                }
+                Console.ReadLine();
+                counter = 0;
                 foreach (StringIntPair word in c.LastThreeLettersSorted)
                 {
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
@@ -42,6 +60,11 @@ namespace cipher
                         break;
                     }
 
+                }
+                Console.ReadLine();
+                foreach (StringIntPair word in c.DoubleLettersSorted)
+                {
+                    Console.WriteLine("letters: {0} , appears {1} times.", word.Key, word.Value);
                 }
                 Console.ReadLine();
                 foreach (StringIntPair word in c.OneLetterWordsSorted)
@@ -60,8 +83,15 @@ namespace cipher
                 test.addOneLetterWord();
                 test.encrypeTwoLetterWord();
                
-                test.encrypteByPossibilities();
-                
+            //    test.encrypteByPossibilities();
+
+                WordMatch match = new WordMatch("the", "CHA", test.EncryptionKey);
+                Console.WriteLine("grade for match is:{0}", match.MatchPrecentage);
+                Console.WriteLine("required subs are :\n");
+                foreach (KeyValuePair<char, char> kvp in match.Subs)
+                {
+                    Console.WriteLine("letter:{0} sub:{1}", kvp.Key, kvp.Value);
+                } 
                 test.randomFill();
                 Console.WriteLine("The table is : \n {0}",test.Table.ToString());
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
@@ -69,9 +99,9 @@ namespace cipher
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
                 Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
                // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
-                
+
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 Console.WriteLine("file does not exist");
             }

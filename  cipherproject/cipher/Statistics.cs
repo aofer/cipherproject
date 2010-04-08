@@ -33,13 +33,31 @@ namespace cipher
         private SortedList<String, int> _bigrams;
         private List<StringIntPair> _bigramsSorted;
 
+        private SortedList<String, int> _trigrams;
+        private List<StringIntPair> _trigramsSorted;
+
+        private SortedList<String, int> _doubleLetters;
+        private List<StringIntPair> _doubleLettersSorted;
+
+
         private String _filename;
 //----------------------getters/setters------------------------------------------------
 
+        public List<StringIntPair> DoubleLettersSorted
+        {
+            get { return _doubleLettersSorted; }
+        }
+        public List<StringIntPair> TrigramsSorted
+        {
+            get { return _trigramsSorted; }
+        }
+        public List<StringIntPair> BigramsSorted
+        {
+            get { return _bigramsSorted; }
+        }
         public List<StringIntPair> LastThreeLettersSorted
         {
             get { return _lastThreeLettersSorted; }
-            set { _lastThreeLettersSorted = value; }
         }
         public List<CharIntPair> PossiblyCapitalSorted
         {
@@ -74,12 +92,18 @@ namespace cipher
             this._twoLetterWords = new SortedList<String, int>();
             this._threeLetterWords = new SortedList<String, int>();
             this._lastThreeLetters = new SortedList<String, int>();
-            this.LastThreeLettersSorted = new List<StringIntPair>();
+            this._lastThreeLettersSorted = new List<StringIntPair>();
             this._possiblyCapital = new SortedList<char,int>();
             this._possiblyCapitalSorted = new List<CharIntPair>();
             this._oneLetterWords = new SortedList<string, int>();
             this._oneLetterWordsSorted = new List<StringIntPair>();
             this._twoLetterWordsSorted = new List<StringIntPair>();
+            this._bigrams = new SortedList<string, int>();
+            this._bigramsSorted = new List<StringIntPair>();
+            this._trigrams = new SortedList<String, int>();
+            this._trigramsSorted = new List<StringIntPair>();
+            this._doubleLetters = new SortedList<string, int>();
+            this._doubleLettersSorted = new List<StringIntPair>();
             initStatistics(this._filename);
         }
 
@@ -124,6 +148,9 @@ namespace cipher
                     threeLetterWordsCheck(word);
                     checkLast3Letters(word);
                     oneLetterWordCheck(word);
+                    findBiGrams(word);
+                    findTriGrams(word);
+                    findDoubleLetters(word);
                 }
             }
             //sort all the statistics by appearances
@@ -133,6 +160,9 @@ namespace cipher
             this._threeLetterWordsSorted = sortByValue(this._threeLetterWords);
             this._possiblyCapitalSorted = sortByValue(this._possiblyCapital);
             this._lastThreeLettersSorted = sortByValue(this._lastThreeLetters);
+            this._bigramsSorted = sortByValue(this._bigrams);
+            this._trigramsSorted = sortByValue(this._trigrams);
+            this._doubleLettersSorted = sortByValue(this._doubleLetters);
         }
         private void checkLast3Letters(String word)
         {
@@ -147,6 +177,73 @@ namespace cipher
                 else
                 {
                     this._lastThreeLetters[ending]++;
+                }
+            }
+        }
+        private void findDoubleLetters(String word)
+        {
+            if (word.Length >= 2)
+            {
+                for (int i = 0; i < word.Length - 1; i++)
+                {
+                    String pair = word.Substring(i, 2);
+                    if (pair[0] == pair[1] && checkIfLetter(pair[0]))
+                    {
+                        if (this._doubleLetters.ContainsKey(pair))
+                        {
+                            this._doubleLetters[pair]++;
+                        }
+                        else
+                        {
+
+                            this._doubleLetters.Add(pair, 1);
+                        }
+                    }
+                }
+            }
+        }
+        private String[] findNgrams(String word, int n)
+        {
+            String[] res = new String[word.Length - (n - 1)];
+            for (int i = 0; i < word.Length - (n - 1); i++)
+            {
+                res[i] = word.Substring(i, n);
+            }
+            return res;
+        }
+        private void findBiGrams(String word)
+        {
+            if (word.Length >= 2)
+            {
+                String[] bigrams = findNgrams(word, 2);
+                foreach (String str in bigrams)
+                {
+                    if (this._bigrams.ContainsKey(str))
+                    {
+                        this._bigrams[str]++;
+                    }
+                    else
+                    {
+                        this._bigrams.Add(str, 1);
+                    }
+                }
+            }
+        }
+        private void findTriGrams(String word)
+        {
+            if (word.Length >= 2)
+            {
+                String[] trigrams = findNgrams(word, 2);
+                foreach (String str in trigrams)
+                {
+                    if (this._trigrams.ContainsKey(str))
+                    {
+                        this._trigrams[str]++;
+                    }
+                    else
+                    {
+                        this._trigrams.Add(str, 1);
+                    }
                 }
             }
         }
