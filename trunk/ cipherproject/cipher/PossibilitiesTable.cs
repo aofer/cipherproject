@@ -42,6 +42,16 @@ namespace cipher
         {
             this._table[letter].Remove(possibleSub);
         }
+
+        public void removeLetterList(char letter)
+        {
+            int len = this._table[letter].Count;
+            for (int i = 0; i < len; i++)
+            {
+                this._table[letter].Remove(this._table[letter].ElementAt(i).Key);
+            }
+        }
+
         public String ToString()
         {
             String res = "";
