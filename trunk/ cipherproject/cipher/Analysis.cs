@@ -72,7 +72,59 @@ namespace cipher
             this._table.removeLetterList('I');
    
         }
-
+        public void addDoubleLetters()
+        {
+            String doubleL = this._statistics.DoubleLettersSorted[0].Key;
+            this._encryptionKey['l'] = doubleL[0];
+            this._remainingLetters.Remove(doubleL[0]);
+        }
+        public void addThreeLetterWords()
+        {
+            String encryptedThe = this._statistics.ThreeLetterWordsSorted[0].Key;
+            String encryptedAnd = this._statistics.ThreeLetterWordsSorted[1].Key;
+            String[] commonWords = {"for","are","but","not","you","all","any","can","had","her","was","one","our","out","has","him" };
+            WordMatch match = new WordMatch("the", encryptedThe, _encryptionKey);
+            foreach (KeyValuePair<char, char> kvp in match.Subs)
+            {
+                useWordMatch(match);
+            }
+            match = new WordMatch("and", encryptedAnd, _encryptionKey);
+            foreach (KeyValuePair<char, char> kvp in match.Subs)
+            {
+                useWordMatch(match);
+            }
+            for (int i = 2; i < 18; i++)
+            {
+                foreach (String word in commonWords)
+                {
+                    match = new WordMatch(word, this._statistics.ThreeLetterWordsSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage > 50)
+                    {
+                        useWordMatch(match);
+                    }
+                    else if (match.MatchPrecentage > 30)
+                    {
+                        insertMatchToTable(match, 1);
+                    }
+                }
+            }
+        }
+        private void useWordMatch(WordMatch match)
+        {
+            foreach (KeyValuePair<char,char> kvp in match.Subs)
+            {
+                this._encryptionKey[kvp.Key] = kvp.Value;
+                this._remainingLetters.Remove(kvp.Value);
+            }
+        }
+        private void insertMatchToTable(WordMatch match,int grade)
+        {
+            foreach (KeyValuePair<char,char> kvp in match.Subs)
+            {
+                this._table.increaseGrade(kvp.Key, kvp.Value,grade);
+                this._remainingLetters.Remove(kvp.Value);
+            }
+        }
         /**
          * encrpte two letter words
          */
@@ -197,7 +249,12 @@ namespace cipher
                 {
                     Random rand = new Random();
                     int randIndex = rand.Next(0, this._remainingLetters.Count); //chooses a random letter to fill in the key
-                    this._encryptionKey.Add(ch, this._remainingLetters[randIndex]);
+                    if (this._remainingLetters.Count == 0)
+                    {
+                        this._encryptionKey[ch] = '?';
+                        break;
+                    }
+                    this._encryptionKey[ch] =  this._remainingLetters[randIndex];
                     this._remainingLetters.Remove(this._remainingLetters[randIndex]); //removes the random letter from the remaining letters
                 }
             }
