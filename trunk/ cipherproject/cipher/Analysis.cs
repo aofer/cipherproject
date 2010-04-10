@@ -289,7 +289,7 @@ namespace cipher
                     {          
                         if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[j][0])
                         {
-                            this._table.increaseGrade(freqArr[j][1], word[1], 2);
+                            this._table.increaseGrade(freqArr[j][1], word[1], 1);
                         }
                     }
 
@@ -300,7 +300,7 @@ namespace cipher
                     {
                         if (this.getKeyByValue(this._encryptionKey, word[1]) == freqArr[j][1])
                         {
-                            this._table.increaseGrade(freqArr[j][0], word[0], 2);
+                            this._table.increaseGrade(freqArr[j][0], word[0], 1);
                         }
                     }
 
@@ -517,6 +517,35 @@ namespace cipher
                 }
             }
             return res;
+        }
+
+
+        public void encrypteByMaxPossibilities()
+        {
+            for (int k = 0; k < _remainingLetters.Count; k++)
+            {
+                char letter = '?';
+                KeyValuePair<char, int> tMax = new KeyValuePair<char, int>('!', 0);
+                for (int i = 0; i < this._table.Table.Count; i++)
+                {
+                    SortedList<char, int> tList = this._table.Table.ElementAt<KeyValuePair<char, SortedList<char, int>>>(i).Value;
+                    if (tList.Count != 0)
+                    {
+                        for (int j = 0; j < tList.Count; j++)
+                        {
+                            KeyValuePair<char, int> tPair = tList.ElementAt<KeyValuePair<char, int>>(j);
+                            if (tPair.Value > tMax.Value)
+                            {
+                                tMax = tPair;
+                                letter = this._table.Table.ElementAt<KeyValuePair<char, SortedList<char, int>>>(i).Key;
+                            }
+                        }
+                    }
+                }
+                this._encryptionKey[letter] = tMax.Key;
+                this._remainingLetters.Remove(tMax.Key);
+                refreshTable();
+            }
         }
 
         //used for debugging and finding the repeating char

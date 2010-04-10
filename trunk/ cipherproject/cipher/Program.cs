@@ -112,8 +112,9 @@ namespace cipher
                 test.addFourLetterWords();
               //  test.addRemainingFreq();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
-                test.encrypteByPossibilities();
-             //   test.fillPossibilities();
+               // test.encrypteByPossibilities();
+                test.encrypteByMaxPossibilities();
+                //  test.fillPossibilities();
                 test.randomFill();
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
@@ -121,6 +122,7 @@ namespace cipher
                 Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
                 // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
                 test.printMisMatches(fileName.Substring(0,fileName.Length - 11) + ".key.txt", test.printKey());
+                
             }
             catch (IOException)
             {
