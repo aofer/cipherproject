@@ -90,17 +90,56 @@ namespace cipher
             refreshTable();
         }
 
-        public void addTriGrams()
+        public void addBiGrams()
         {
-            String tIng = this._statistics.TrigramsSorted[0].Key;
+            String[] commonBiGrams = {"th","he","in","er","an","re","nd","on","en","at","ou","ed","ha","to","or","it","is","hi","as","ng"};
+            WordMatch match = null;
+            foreach (String word in commonBiGrams)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    match = new WordMatch(word, this._statistics.BigramsSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage > 0)
+                    {
+                        insertMatchToTable(match,1);
+                    }
+                }
+
+            }
+            refreshTable();
+
+        }
+
+        public void add3LastLetters()
+        {
+            String tIng = this._statistics.LastThreeLettersSorted[0].Key;
             WordMatch match = new WordMatch("ing", tIng, _encryptionKey);
-            Console.WriteLine(_encryptionKey.ContainsKey('g'));
-            Console.ReadLine();
             foreach (KeyValuePair<char, char> kvp in match.Subs)
             {
                 useWordMatch(match);
             }
             refreshTable();
+        }
+
+
+        public void addRemainingFreq()
+        {
+            char[] tLowerCases = {'k','j','q','x','z','s','m'};
+            for (int i = 0; i < 35; i++)
+            {
+                if (!this._encryptionKey.ContainsValue(this._statistics.LetterAppearancesSorted[i].Key))
+                {
+                    foreach (char ch in tLowerCases)
+                    {
+                        this._table.increaseGrade(ch, this._statistics.LetterAppearancesSorted[i].Key, 1);
+                    }
+                }
+            }
+            refreshTable();
+        }
+        public void addTriGrams()
+        {
+            WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
             for (int i = 0; i < 25; i++)
             {
@@ -137,7 +176,7 @@ namespace cipher
                 useWordMatch(match);
             }
             refreshTable();
-            for (int i = 2; i < 18; i++)
+            for (int i = 2; i < 25; i++)
             {
                 foreach (String word in commonWords)
                 {
