@@ -42,10 +42,18 @@ namespace cipher
         private SortedList<String, int> _quadGrams;
         private List<StringIntPair> _quadGramsSorted;
 
+        private SortedList<String, int> _fourLetterWords;
+        private List<StringIntPair> _fourLetterWordsSorted;
+
 
 
         private String _filename;
-//----------------------getters/setters------------------------------------------------
+//----------------------getters------------------------------------------------
+        
+        public List<StringIntPair> FourLetterWordsSorted
+        {
+            get { return _fourLetterWordsSorted; }
+        }
 
         public List<StringIntPair> QuadGramsSorted
         {
@@ -115,6 +123,8 @@ namespace cipher
             this._doubleLettersSorted = new List<StringIntPair>();
             this._quadGrams = new SortedList<string, int>();
             this._quadGramsSorted = new List<StringIntPair>();
+            this._fourLetterWords = new SortedList<string, int>();
+            this._fourLetterWordsSorted = new List<StringIntPair>();
             initStatistics(this._filename);
         }
 
@@ -163,6 +173,7 @@ namespace cipher
                     findTriGrams(word);
                     findQuadGrams(word);
                     findDoubleLetters(word);
+                    fourLetterWordsCheck(word);
                 }
             }
             //sort all the statistics by appearances
@@ -176,6 +187,7 @@ namespace cipher
             this._trigramsSorted = sortByValue(this._trigrams);
             this._doubleLettersSorted = sortByValue(this._doubleLetters);
             this._quadGramsSorted = sortByValue(this._quadGrams);
+            this._fourLetterWordsSorted = sortByValue(this._fourLetterWords);
         }
         private void checkLast3Letters(String word)
         {
@@ -193,6 +205,7 @@ namespace cipher
                 }
             }
         }
+
         private void findDoubleLetters(String word)
         {
             if (word.Length >= 2)
@@ -327,6 +340,21 @@ namespace cipher
                         this._threeLetterWords[word]++;
                     }
                 }
+        }
+        private void fourLetterWordsCheck(String word)
+        {
+            Regex fourLetterWord = new Regex("^[a-zA-Z]{4}$");
+            if (fourLetterWord.IsMatch(word))
+            {
+                if (!this._fourLetterWords.ContainsKey(word))
+                {
+                    this._fourLetterWords.Add(word, 1);
+                }
+                else
+                {
+                    this._fourLetterWords[word]++;
+                }
+            }
         }
         private void getLetterAppearances(String word)
         {

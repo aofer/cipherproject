@@ -159,7 +159,27 @@ namespace cipher
             }
             refreshTable();
         }
+        public void addFourLetterWords()
+        {
+            String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them" ,"just"};
+            WordMatch match = null;
+            for (int i = 0; i < 60; i++)
+            {
+                foreach (String word in commonWords)
+                {
+                    match = new WordMatch(word, this._statistics.FourLetterWordsSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage > 70)
+                    {
+                        useWordMatch(match);
+                    }
+                    else if (match.MatchPrecentage > 0){
+                        insertMatchToTable(match,1);
+                    }
+                }
+            }
+            refreshTable();
 
+        }
         public void addThreeLetterWords()
         {
             String encryptedThe = this._statistics.ThreeLetterWordsSorted[0].Key;
