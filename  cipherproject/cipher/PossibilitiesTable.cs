@@ -45,11 +45,7 @@ namespace cipher
 
         public void removeLetterList(char letter)
         {
-            int len = this._table[letter].Count;
-            for (int i = 0; i < len; i++)
-            {
-                this._table[letter].Remove(this._table[letter].ElementAt(i).Key);
-            }
+            this._table[letter] = new SortedList<char, int>();
         }
 
         public String ToString()
