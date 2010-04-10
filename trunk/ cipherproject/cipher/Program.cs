@@ -83,15 +83,9 @@ namespace cipher
                 test.addOneLetterWord();
                 test.encrypeTwoLetterWord();
                 test.addThreeLetterWords();
+                test.addDoubleLetters();
                 test.encrypteByPossibilities();
 
-                WordMatch match = new WordMatch("the", "CHA", test.EncryptionKey);
-                Console.WriteLine("grade for match is:{0}", match.MatchPrecentage);
-                Console.WriteLine("required subs are :\n");
-                foreach (KeyValuePair<char, char> kvp in match.Subs)
-                {
-                    Console.WriteLine("letter:{0} sub:{1}", kvp.Key, kvp.Value);
-                }
                 test.randomFill();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
@@ -99,7 +93,6 @@ namespace cipher
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
                 Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
                 // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
-
             }
             catch (IOException)
             {

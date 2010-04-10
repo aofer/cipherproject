@@ -69,10 +69,15 @@ namespace cipher
                         grade = 0;
                         break;
                     }
-                  //  else if (currentKey.ContainsValue(this._encryptedWord[i]) &&currentKey.
+                    else if (currentKey.ContainsValue(this._encryptedWord[i]))
+                    {
+                        this._subs = new SortedList<char, char>();
+                        grade = 0;
+                        break;
+                    }
                     else
                     {
-                        this._subs[this._word[i]] =  this._encryptedWord[i];
+                        this._subs[this._word[i]] = this._encryptedWord[i];
                     }
                 }
                 this._matchPrecentage = (grade / (float)this._word.Length) * 100;

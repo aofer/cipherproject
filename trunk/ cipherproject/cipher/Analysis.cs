@@ -70,13 +70,14 @@ namespace cipher
             this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
             this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
             this._table.removeLetterList('I');
-   
+            refreshTable();  
         }
         public void addDoubleLetters()
         {
             String doubleL = this._statistics.DoubleLettersSorted[0].Key;
             this._encryptionKey['l'] = doubleL[0];
             this._remainingLetters.Remove(doubleL[0]);
+            refreshTable();
         }
         public void addThreeLetterWords()
         {
@@ -93,6 +94,7 @@ namespace cipher
             {
                 useWordMatch(match);
             }
+            refreshTable();
             for (int i = 2; i < 18; i++)
             {
                 foreach (String word in commonWords)
@@ -109,20 +111,22 @@ namespace cipher
                 }
             }
         }
+
         private void useWordMatch(WordMatch match)
         {
             foreach (KeyValuePair<char,char> kvp in match.Subs)
             {
                 this._encryptionKey[kvp.Key] = kvp.Value;
                 this._remainingLetters.Remove(kvp.Value);
+
             }
         }
+
         private void insertMatchToTable(WordMatch match,int grade)
         {
             foreach (KeyValuePair<char,char> kvp in match.Subs)
             {
                 this._table.increaseGrade(kvp.Key, kvp.Value,grade);
-                this._remainingLetters.Remove(kvp.Value);
             }
         }
         /**
@@ -152,7 +156,7 @@ namespace cipher
                     this._remainingLetters.Remove(secondCommon[1]);
                     this._table.removeLetterList('o');
             }
-           
+            refreshTable();
             String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
             /*for (int i = 0; i < 6; i++)
             {
@@ -201,6 +205,7 @@ namespace cipher
 
                 }
             }
+            refreshTable();
         }
 
 
@@ -350,6 +355,107 @@ namespace cipher
                 }
             }
             return res;
+        }
+
+        //used for debugging and finding the repeating char
+        public void printKeyErrors(String key)
+        {
+            for (char i = 'a'; i <= 'z'; i++)
+            {
+                int counter = 0;
+                for (int j = 0; j < key.Length; j++)
+                {
+                    if (i == key[j])
+                    {
+                        counter++;
+                    }
+                    if (counter > 1)
+                    {
+                        Console.WriteLine("error found: {0}", i);
+                    }
+                }
+            }
+            for (char i = 'A'; i <= 'Z'; i++)
+            {
+                int counter = 0;
+                for (int j = 0; j < key.Length; j++)
+                {
+                    if (i == key[j])
+                    {
+                        counter++;
+                    }
+                    if (counter > 1)
+                    {
+                        Console.WriteLine("error found: {0}", i);
+                    }
+                }
+            }
+        }
+        //also used for debugging the key
+        public void printMissingLetter()
+        {
+            for (char ch = 'a'; ch <= 'z'; ch++)
+            {
+                if (!_encryptionKey.ContainsValue(ch))
+                {
+                    Console.WriteLine("letter : {0} is missing", ch);
+                }
+            }
+            for (char ch = 'A'; ch <= 'Z'; ch++)
+            {
+                if (!_encryptionKey.ContainsValue(ch))
+                {
+                    Console.WriteLine("letter : {0} is missing", ch);
+                }
+            }
+            if (this._remainingLetters.Count != 0)
+            {
+                Console.WriteLine("remaining letters still contains: {0}", this._remainingLetters[0]);
+            }
+        }
+        public void refreshTable()
+        {
+            //foreach (KeyValuePair<char, SortedList<char,int>> kvp in this._table.Table)
+            for (char j = 'a' ; j <= 'z';j++)
+            {
+                if (_encryptionKey.ContainsKey(j))
+                {
+                    this._table.removeLetterList(j);
+                }
+                else
+                {
+                    if (_table.Table[j].Count > 0)
+                    {
+                        for (int i = 0; i < _table.Table[j].Count; i++)
+                        {
+                            if (!this._remainingLetters.Contains(_table.Table[j].ElementAt<KeyValuePair<char, int>>(i).Key))
+                            {
+                                this._table.removeLetter(j, _table.Table[j].ElementAt<KeyValuePair<char, int>>(i).Key);
+                            }
+                        }
+                    }
+                }
+            }
+            for (char j = 'A'; j <= 'Z'; j++)
+            {
+                if (_encryptionKey.ContainsKey(j))
+                {
+                    this._table.removeLetterList(j);
+                }
+                else
+                {
+                    if (_table.Table[j].Count > 0)
+                    {
+                        for (int i = 0; i < _table.Table[j].Count; i++)
+                        {
+                            if (!this._remainingLetters.Contains(_table.Table[j].ElementAt<KeyValuePair<char, int>>(i).Key))
+                            {
+                                this._table.removeLetter(j, _table.Table[j].ElementAt<KeyValuePair<char, int>>(i).Key);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     }
