@@ -39,9 +39,18 @@ namespace cipher
         private SortedList<String, int> _doubleLetters;
         private List<StringIntPair> _doubleLettersSorted;
 
+        private SortedList<String, int> _quadGrams;
+        private List<StringIntPair> _quadGramsSorted;
+
+
 
         private String _filename;
 //----------------------getters/setters------------------------------------------------
+
+        public List<StringIntPair> QuadGramsSorted
+        {
+            get { return _quadGramsSorted; }
+        }
 
         public List<StringIntPair> DoubleLettersSorted
         {
@@ -104,6 +113,8 @@ namespace cipher
             this._trigramsSorted = new List<StringIntPair>();
             this._doubleLetters = new SortedList<string, int>();
             this._doubleLettersSorted = new List<StringIntPair>();
+            this._quadGrams = new SortedList<string, int>();
+            this._quadGramsSorted = new List<StringIntPair>();
             initStatistics(this._filename);
         }
 
@@ -150,6 +161,7 @@ namespace cipher
                     oneLetterWordCheck(word);
                     findBiGrams(word);
                     findTriGrams(word);
+                    findQuadGrams(word);
                     findDoubleLetters(word);
                 }
             }
@@ -163,6 +175,7 @@ namespace cipher
             this._bigramsSorted = sortByValue(this._bigrams);
             this._trigramsSorted = sortByValue(this._trigrams);
             this._doubleLettersSorted = sortByValue(this._doubleLetters);
+            this._quadGramsSorted = sortByValue(this._quadGrams);
         }
         private void checkLast3Letters(String word)
         {
@@ -243,6 +256,24 @@ namespace cipher
                     else
                     {
                         this._trigrams.Add(str, 1);
+                    }
+                }
+            }
+        }
+        private void findQuadGrams(String word)
+        {
+            if (word.Length >= 4)
+            {
+                String[] quadGrams = findNgrams(word, 4);
+                foreach (String str in quadGrams)
+                {
+                    if (this._quadGrams.ContainsKey(str))
+                    {
+                        this._quadGrams[str]++;
+                    }
+                    else
+                    {
+                        this._quadGrams.Add(str, 1);
                     }
                 }
             }

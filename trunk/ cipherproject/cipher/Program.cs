@@ -62,6 +62,16 @@ namespace cipher
                     }
 
                 }
+                counter = 0;
+                foreach (StringIntPair word in c.QuadGramsSorted)
+                {
+                    Console.WriteLine("quadgram is: {0} , appears {1} times.", word.Key, word.Value);
+                    if (counter++ > 100)
+                    {
+                        break;
+                    }
+
+                }
                 Console.ReadLine();
                 foreach (StringIntPair word in c.DoubleLettersSorted)
                 {
@@ -83,14 +93,17 @@ namespace cipher
                 test.addLetterFreq();
                 test.addOneLetterWord();
                 test.encrypeTwoLetterWord();
+
                 test.addThreeLetterWords();
                 test.addDoubleLetters();
+                test.add3LastLetters();
                 test.addTriGrams();
+                test.addBiGrams();
+              //  test.addRemainingFreq();
+                Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                 test.encrypteByPossibilities();
-                Console.WriteLine("The table is : \n {0}", test.Table.ToString());
-              //  test.fillPossibilities();
+             //   test.fillPossibilities();
                 test.randomFill();
-                Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
