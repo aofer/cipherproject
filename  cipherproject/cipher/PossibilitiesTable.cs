@@ -70,6 +70,23 @@ namespace cipher
             return res;
         }
 
+        public KeyValuePair<char, int> getBestSub()
+        {
+            KeyValuePair<char, int> tKvp = new KeyValuePair<char, int>('?', 0);
+            foreach (KeyValuePair<char, SortedList<char, int>> outter in this._table)
+            {
+                foreach (KeyValuePair<char, int> inner in outter.Value)
+                {
+                    if (inner.Value > tKvp.Value)
+                    {
+                        tKvp = inner;
+                    }
+                }
+            }
+
+            return tKvp;
+        }
+
 
     }
 }
