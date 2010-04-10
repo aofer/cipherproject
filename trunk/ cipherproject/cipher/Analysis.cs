@@ -70,6 +70,7 @@ namespace cipher
             this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
             this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
             this._table.removeLetterList('I');
+            this._table.increaseGrade('A',this._statistics.OneLetterWordsSorted[2].Key[0], 1);
             refreshTable();  
         }
         public void addDoubleLetters()
@@ -78,7 +79,48 @@ namespace cipher
             this._encryptionKey['l'] = doubleL[0];
             this._remainingLetters.Remove(doubleL[0]);
             refreshTable();
+            char[] commonDoubles = { 'l', 'e', 'o', 't', 's', 'r', 'p', 'f', 'n', 'd', 'g', 'm' };
+            for (int i = 0; i < 10; i++)
+            {
+                foreach (char ch in commonDoubles)
+                {
+                    this._table.increaseGrade(ch, this._statistics.DoubleLettersSorted[i].Key[0], 1);
+                }
+            }
+            refreshTable();
         }
+
+        public void addTriGrams()
+        {
+            String tIng = this._statistics.TrigramsSorted[0].Key;
+            WordMatch match = new WordMatch("ing", tIng, _encryptionKey);
+            Console.WriteLine(_encryptionKey.ContainsKey('g'));
+            Console.ReadLine();
+            foreach (KeyValuePair<char, char> kvp in match.Subs)
+            {
+                useWordMatch(match);
+            }
+            refreshTable();
+            String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
+            for (int i = 0; i < 25; i++)
+            {
+                foreach (String word in commonTriGrams)
+                {
+                    match = new WordMatch(word, this._statistics.TrigramsSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage > 50)
+                    {
+                        useWordMatch(match);
+                        refreshTable();
+                    }
+                    else if (match.MatchPrecentage > 30)
+                    {
+                        insertMatchToTable(match, 1);
+                    }
+                }
+            }
+            refreshTable();
+        }
+
         public void addThreeLetterWords()
         {
             String encryptedThe = this._statistics.ThreeLetterWordsSorted[0].Key;
@@ -307,10 +349,69 @@ namespace cipher
             }
             return grade;
         }
+        //used for debugging and statistics analysis
+        public void printMisMatches(String fileName,String key)
+        {
+            try
+            {
+                TextReader tr = new StreamReader(fileName);
+                String correctKey = tr.ReadToEnd();
+                char letter = 'a';
+                for (int i = 0; i < 52; i++)
+                {
+                    if (correctKey[i] != key[i])
+                    {
+                        Console.WriteLine("letter: {0} should have got: {1} but got {2} instead.",letter, correctKey[i], key[i]);
+                    }
+                    if (letter == 'z')
+                    {
+                        letter = 'A';
+                    }
+                    else
+                    {
+                        letter++;
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("file does not exist");
+            }
+        }
+        public void fillPossibilities()
+        {
+            for (int i = 0; i < _remainingLetters.Count; i++)
+            {
+                char letter = '?';
+                KeyValuePair<char, int> tKvp = new KeyValuePair<char, int>('?', 0);
+                //foreach (KeyValuePair<char, SortedList<char, int>> outter in this._table.Table)
+                for (int j = 0;j < this._table.Table.Count;j++)
+                {
+                  //  foreach (KeyValuePair<char, int> inner in outter.Value)
+                    SortedList<char,int> tList = this._table.Table.ElementAt<KeyValuePair<char,SortedList<char,int>>>(j).Value;
+                    for (int n = 0; n < tList.Count;n++)
+                    {
+                        KeyValuePair<char,int> tPair = tList.ElementAt<KeyValuePair<char,int>>(n);
+                        if (tPair.Value > tKvp.Value)
+                        {
+                            tKvp = tPair;
+                            letter = this._table.Table.ElementAt<KeyValuePair<char,SortedList<char,int>>>(j).Key;
+                            this._encryptionKey[letter] = tKvp.Key;
+                            this._remainingLetters.Remove(letter);
+                            refreshTable() ;
+                        }
+                    }
+                }
+            }
+        }
+
 
         /**
          * fill the encryption key by the possibilities table
          */
+
+
+
         public void encrypteByPossibilities()
         {
             for (char c = 'a'; c <= 'z'; c++)
@@ -320,6 +421,7 @@ namespace cipher
                     {
                         this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
                         this._remainingLetters.Remove(mostPossibleLetter(this.Table.Table[c]));
+                        refreshTable();
                     }
             }
 
@@ -330,6 +432,7 @@ namespace cipher
                     {
                         this._encryptionKey[c] = mostPossibleLetter(this.Table.Table[c]);
                         this._remainingLetters.Remove(mostPossibleLetter(this.Table.Table[c]));
+                        refreshTable();
                     }
             }
 

@@ -231,9 +231,9 @@ namespace cipher
         }
         private void findTriGrams(String word)
         {
-            if (word.Length >= 2)
+            if (word.Length >= 3)
             {
-                String[] trigrams = findNgrams(word, 2);
+                String[] trigrams = findNgrams(word, 3);
                 foreach (String str in trigrams)
                 {
                     if (this._trigrams.ContainsKey(str))
