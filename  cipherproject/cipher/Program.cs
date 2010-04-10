@@ -33,6 +33,16 @@ namespace cipher
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
                 Console.ReadLine();
+                foreach (StringIntPair word in c.FourLetterWordsSorted)
+                {
+                    if (counter++ > 50)
+                    {
+                        break;
+                    }
+                    Console.WriteLine(" 4 letter word is: {0} , appears {1} times.", word.Key, word.Value);
+                }
+                Console.ReadLine();
+                counter = 0;
                 foreach (StringIntPair word in c.BigramsSorted)
                 {
                     if (counter++ > 30)
@@ -99,6 +109,7 @@ namespace cipher
                 test.add3LastLetters();
                 test.addTriGrams();
                 test.addBiGrams();
+                test.addFourLetterWords();
               //  test.addRemainingFreq();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                 test.encrypteByPossibilities();
