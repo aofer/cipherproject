@@ -146,7 +146,6 @@ namespace cipher
                 Console.ReadLine();
                 test.encrypteByMaxPossibilities();//encrypte the small letters
 
-
                 test.add6LetterWordUpper();
                 test.add5LetterWordUpper();
                 test.add4LetterWordUpper();
