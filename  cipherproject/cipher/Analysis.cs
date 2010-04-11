@@ -105,7 +105,7 @@ namespace cipher
             {
                 foreach (char ch in commonDoubles)
                 {
-                    this._table.increaseGrade(ch, this._statistics.DoubleLettersSorted[i].Key[0], 1);
+                    this._table.increaseGrade(ch, this._statistics.DoubleLettersSorted[i].Key[0], 2);
                 }
             }
             refreshTable();
@@ -117,7 +117,7 @@ namespace cipher
             WordMatch match = null;
             foreach (String word in commonBiGrams)
             {
-                int size = Math.Min(20, this._statistics.BigramsSorted.Count());
+                int size = Math.Min(25, this._statistics.BigramsSorted.Count());
                 for (int i = 0; i < size; i++)
                 {
                     match = new WordMatch(word, this._statistics.BigramsSorted[i].Key, _encryptionKey);
@@ -141,7 +141,7 @@ namespace cipher
                 useWordMatch(match);
             }
             String[] commonEndings = { "ing", "hat", "ere", "gth", "ted", "ith", "red", "ent", "ion", "aid", "nce", "ter", "uld", "ess", "ore", "ave", "ver", "rom", "ned", "hen", "ick" };
-            int size = Math.Min(20, this._statistics.LastThreeLettersSorted.Count());
+            int size = Math.Min(25, this._statistics.LastThreeLettersSorted.Count());
             foreach (String str in commonEndings)
             {
                 for (int i = 0; i < size; i++)
@@ -164,7 +164,7 @@ namespace cipher
         {
             WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
-            int size = Math.Min(20, this._statistics.TrigramsSorted.Count());
+            int size = Math.Min(25, this._statistics.TrigramsSorted.Count());
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonTriGrams)
@@ -172,9 +172,8 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.TrigramsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                        /*
-                        useWordMatch(match);
-                         */
+
+                       // useWordMatch(match);
                         insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
@@ -234,7 +233,7 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.ThreeLetterWordsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                        //useWordMatch(match);
+                       // useWordMatch(match);
                         insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
@@ -288,7 +287,7 @@ namespace cipher
                     break;
                 }
             }
-            size = Math.Min(30, this._statistics.TwoLetterWordsSorted.Count());
+            size = Math.Min(20, this._statistics.TwoLetterWordsSorted.Count());
             foreach (String str in commonWords){
                 for (int i = 0; i < size; i++)
                 {
