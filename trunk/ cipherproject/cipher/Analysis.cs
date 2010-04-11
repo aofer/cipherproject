@@ -149,7 +149,8 @@ namespace cipher
                     match = new WordMatch(str, this._statistics.LastThreeLettersSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                        useWordMatch(match);
+                        //useWordMatch(match);
+                        insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 0)
                     {
@@ -164,7 +165,7 @@ namespace cipher
         {
             WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
-            int size = Math.Min(25, this._statistics.TrigramsSorted.Count());
+            int size = Math.Min(40, this._statistics.TrigramsSorted.Count());
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonTriGrams)
@@ -188,7 +189,7 @@ namespace cipher
         {
             String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them", "just", "very", "that", "with" };
             WordMatch match = null;
-            int size = Math.Min(40, this._statistics.FourLetterWordsSorted.Count);
+            int size = Math.Min(100, this._statistics.FourLetterWordsSorted.Count);
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonWords)
@@ -223,7 +224,7 @@ namespace cipher
                 useWordMatch(match);
             }
             refreshTable();
-            int size = Math.Min(20, this._statistics.ThreeLetterWordsSorted.Count());
+            int size = Math.Min(30, this._statistics.ThreeLetterWordsSorted.Count());
             for (int i = 2; i < size; i++)
             {
                 foreach (String word in commonWords)
