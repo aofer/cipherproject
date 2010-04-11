@@ -65,13 +65,14 @@ namespace cipher
                 counter = 0;
                 foreach (StringIntPair word in c.LastThreeLettersSorted)
                 {
-                    Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
+                    Console.WriteLine("last three letters are: {0} , appears {1} times.", word.Key, word.Value);
                     if (counter++ > 100)
                     {
                         break;
                     }
 
                 }
+                Console.ReadLine();
                 counter = 0;
                 foreach (StringIntPair word in c.QuadGramsSorted)
                 {
@@ -104,10 +105,6 @@ namespace cipher
                     Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
                 }
                 Console.ReadLine();
-                foreach (CharIntPair ch in c.PossiblyCapitalSorted)
-                {
-                    Console.WriteLine("letter is: {0} , appears {1} times.", ch.Key, ch.Value);
-                }
 
 
                 Analysis test = new Analysis(c);
