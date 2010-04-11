@@ -138,7 +138,8 @@ namespace cipher
             WordMatch match = new WordMatch("ing", tIng, _encryptionKey);
             foreach (KeyValuePair<char, char> kvp in match.Subs)
             {
-                useWordMatch(match);
+                //useWordMatch(match); Liron changed
+                insertMatchToTable(match, 2);
             }
             String[] commonEndings = { "ing", "hat", "ere", "gth", "ted", "ith", "red", "ent", "ion", "aid", "nce", "ter", "uld", "ess", "ore", "ave", "ver", "rom", "ned", "hen", "ick" };
             int size = Math.Min(25, this._statistics.LastThreeLettersSorted.Count());
@@ -197,7 +198,8 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.FourLetterWordsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 70)
                     {
-                        useWordMatch(match);
+                        //useWordMatch(match); Liron changed
+                        insertMatchToTable(match, 3);
                     }
                     else if (match.MatchPrecentage > 0){
                         insertMatchToTable(match,1);
