@@ -134,12 +134,13 @@ namespace cipher
                 test.addOneLetterWord();
                 //test.encrypeTwoLetterWord();
                 test.addTwoLetterWords();
+                test.add3LastLetters();
                 test.addThreeLetterWords();
                 test.addDoubleLetters();
-                test.add3LastLetters();
                 test.addTriGrams();
                 test.addBiGrams();
                 test.addFourLetterWords();
+
 
                 Console.WriteLine(test.Table.ToString());
                 Console.ReadLine();
