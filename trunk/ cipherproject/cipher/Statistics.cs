@@ -214,7 +214,8 @@ namespace cipher
             this._quadGramsSorted = sortByValue(this._quadGrams);
             this._fourLetterWordsSorted = sortByValue(this._fourLetterWords);
             this._fiveLetterWordsSorted = sortByValue(this._fiveLetterWords);
-            this._fiveLetterWordsSorted = sortByValue(this._sixLetterWords);
+            this._sixLetterWordsSorted = sortByValue(this._sixLetterWords);
+           
         }
         private void checkLast3Letters(String word)
         {

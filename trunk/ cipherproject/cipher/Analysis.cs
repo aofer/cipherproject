@@ -727,14 +727,14 @@ namespace cipher
                         // && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
-                            this._table.increaseGrade(upperCase, firstLetter2, 1);
+                            this._table.increaseGrade(upperCase, firstLetter2, 2);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
                         // && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
                         //&& this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
-                            this._table.increaseGrade(upperCase, firstLetter1, 1);
+                            this._table.increaseGrade(upperCase, firstLetter1, 2);
                         }
                     }
 

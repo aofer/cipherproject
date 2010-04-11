@@ -95,6 +95,28 @@ namespace cipher
 
                 }
                 Console.ReadLine();
+                counter = 0;
+                foreach (StringIntPair word in c.FiveLetterWordsSorted)
+                {
+                    Console.WriteLine("5 word is: {0} , appears {1} times.", word.Key, word.Value);
+                    if (counter++ > 100)
+                    {
+                        break;
+                    }
+
+                }
+                Console.ReadLine();
+                counter = 0;
+                foreach (StringIntPair word in c.SixLetterWordsSorted)
+                {
+                    Console.WriteLine("6 word is: {0} , appears {1} times.", word.Key, word.Value);
+                    if (counter++ > 100)
+                    {
+                        break;
+                    }
+
+                }
+                Console.ReadLine();
                 foreach (StringIntPair word in c.DoubleLettersSorted)
                 {
                     Console.WriteLine("letters: {0} , appears {1} times.", word.Key, word.Value);
@@ -122,7 +144,7 @@ namespace cipher
                 test.add6LetterWordUpper();
                 test.add5LetterWordUpper();
                 test.add4LetterWordUpper();
-                test.add3LetterWordUpper();
+               // test.add3LetterWordUpper();
               //  test.addRemainingFreq();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                // test.encrypteByPossibilities();
