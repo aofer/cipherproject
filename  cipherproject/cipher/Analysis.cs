@@ -315,6 +315,12 @@ namespace cipher
          */ 
         public char getKeyByValue(SortedList<char, char>  lst,char c){
             int index = lst.IndexOfValue(c);
+            //bug fix
+          /*  if (index == -1)
+            {
+                return '?';
+            }*/
+
             return lst.ElementAt<KeyValuePair<char, char>>(index).Key;
         }
 
