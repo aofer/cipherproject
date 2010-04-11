@@ -52,13 +52,19 @@ namespace cipher
         private SortedList<String, int> _sixLetterWords;
         private List<StringIntPair> _sixLetterWordsSorted;
 
-       
+        private SortedList<String, int> _sevenLetterWords;
+        private List<StringIntPair> _sevenLetterWordsSorted;
 
+       
 
 
         private String _filename;
 //----------------------getters------------------------------------------------
-        
+        public List<StringIntPair> SevenLetterWordsSorted
+        {
+            get { return _sevenLetterWordsSorted; }
+            set { _sevenLetterWordsSorted = value; }
+        }
         public List<StringIntPair> SixLetterWordsSorted
         {
             get { return _sixLetterWordsSorted; }
@@ -150,6 +156,9 @@ namespace cipher
             this._fiveLetterWordsSorted = new List<StringIntPair>();
             this._sixLetterWords = new SortedList<string, int>();
             this._sixLetterWordsSorted = new List<StringIntPair>();
+            this._sevenLetterWords = new SortedList<string, int>();
+            this._sevenLetterWordsSorted = new List<StringIntPair>();
+
 
             initStatistics(this._filename);
         }
@@ -198,6 +207,7 @@ namespace cipher
                     fourLetterWordsCheck(word);
                     fiveLetterWordsCheck(word);
                     sixLetterWordsCheck(word);
+                    sevenLetterWordsCheck(word);
                 }
             }
             tr.Close();
@@ -215,7 +225,7 @@ namespace cipher
             this._fourLetterWordsSorted = sortByValue(this._fourLetterWords);
             this._fiveLetterWordsSorted = sortByValue(this._fiveLetterWords);
             this._sixLetterWordsSorted = sortByValue(this._sixLetterWords);
-           
+            this._sevenLetterWordsSorted = sortByValue(this._sevenLetterWords);
         }
         private void checkLast3Letters(String word)
         {
@@ -413,6 +423,22 @@ namespace cipher
                 else
                 {
                     this._sixLetterWords[word]++;
+                }
+            }
+        }
+
+        private void sevenLetterWordsCheck(String word)
+        {
+            Regex sevenLetterWord = new Regex("^[a-zA-Z]{7}$");
+            if (sevenLetterWord.IsMatch(word))
+            {
+                if (!this._sevenLetterWords.ContainsKey(word))
+                {
+                    this._sevenLetterWords.Add(word, 1);
+                }
+                else
+                {
+                    this._sevenLetterWords[word]++;
                 }
             }
         }
