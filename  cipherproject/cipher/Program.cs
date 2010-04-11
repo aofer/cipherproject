@@ -145,14 +145,14 @@ namespace cipher
                 Console.WriteLine(test.Table.ToString());
                 Console.ReadLine();
                 test.encrypteByMaxPossibilities();//encrypte the small letters
-
+                test.add7LetterWordUpper();
                 test.add6LetterWordUpper();
                 test.add5LetterWordUpper();
                 test.add4LetterWordUpper();
                 test.add3LetterWordUpper();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                // test.encrypteByPossibilities();
-                test.encrypteByMaxPossibilities();
+                test.encrypteByMaxPossibilities();  
                 //  test.fillPossibilities();
                 Console.WriteLine("temp key is:");
                 Console.WriteLine(test.printTempkey());
