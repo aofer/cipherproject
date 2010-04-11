@@ -83,6 +83,17 @@ namespace cipher
 
                 }
                 Console.ReadLine();
+                counter = 0;
+                foreach (StringIntPair word in c.FourLetterWordsSorted)
+                {
+                    Console.WriteLine("word is: {0} , appears {1} times.", word.Key, word.Value);
+                    if (counter++ > 100)
+                    {
+                        break;
+                    }
+
+                }
+                Console.ReadLine();
                 foreach (StringIntPair word in c.DoubleLettersSorted)
                 {
                     Console.WriteLine("letters: {0} , appears {1} times.", word.Key, word.Value);
@@ -102,8 +113,8 @@ namespace cipher
                 Analysis test = new Analysis(c);
                 test.addLetterFreq();
                 test.addOneLetterWord();
-                test.encrypeTwoLetterWord();
-
+                //test.encrypeTwoLetterWord();
+                test.addTwoLetterWords();
                 test.addThreeLetterWords();
                 test.addDoubleLetters();
                 test.add3LastLetters();
@@ -119,7 +130,7 @@ namespace cipher
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
-                Console.WriteLine("your grade is: {0}", test.calcGrade("The Shadow Line.txt.key.txt", test.printKey()));
+                Console.WriteLine("your grade is: {0}", test.calcGrade(fileName.Substring(0, fileName.Length - 11) + ".key.txt", test.printKey()));
                 // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
                 test.printMisMatches(fileName.Substring(0,fileName.Length - 11) + ".key.txt", test.printKey());
                 TextWriter tw = new StreamWriter(fileName + "_key.txt");

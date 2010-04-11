@@ -64,13 +64,22 @@ namespace cipher
          */
         public void addOneLetterWord()
         {
-            this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
-            this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
-            this._table.removeLetterList('a'); //remove the posibilities for letter a
-            this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
-            this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
-            this._table.removeLetterList('I');
-            this._table.increaseGrade('A',this._statistics.OneLetterWordsSorted[2].Key[0], 1);
+            if (this._statistics.OneLetterWordsSorted.Count() > 0)
+            {
+                this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
+                this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
+                this._table.removeLetterList('a'); //remove the posibilities for letter a
+            }
+            if (this._statistics.OneLetterWordsSorted.Count() > 1)
+            {
+                this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
+                this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
+                this._table.removeLetterList('I');
+            }
+            if (this._statistics.OneLetterWordsSorted.Count() > 1)
+            {
+                this._table.increaseGrade('A', this._statistics.OneLetterWordsSorted[2].Key[0], 1);
+            }
             refreshTable();  
         }
         public void addDoubleLetters()
@@ -80,7 +89,8 @@ namespace cipher
             this._remainingLetters.Remove(doubleL[0]);
             refreshTable();
             char[] commonDoubles = { 'l', 'e', 'o', 't', 's', 'r', 'p', 'f', 'n', 'd', 'g', 'm' };
-            for (int i = 0; i < 10; i++)
+            int size = Math.Min(10, this._statistics.DoubleLettersSorted.Count());
+            for (int i = 0; i < size; i++)
             {
                 foreach (char ch in commonDoubles)
                 {
@@ -96,7 +106,8 @@ namespace cipher
             WordMatch match = null;
             foreach (String word in commonBiGrams)
             {
-                for (int i = 0; i < 20; i++)
+                int size = Math.Min(20, this._statistics.BigramsSorted.Count());
+                for (int i = 0; i < size; i++)
                 {
                     match = new WordMatch(word, this._statistics.BigramsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 0)
@@ -121,27 +132,12 @@ namespace cipher
             refreshTable();
         }
 
-
-        public void addRemainingFreq()
-        {
-            char[] tLowerCases = {'k','j','q','x','z','s','m'};
-            for (int i = 0; i < 35; i++)
-            {
-                if (!this._encryptionKey.ContainsValue(this._statistics.LetterAppearancesSorted[i].Key))
-                {
-                    foreach (char ch in tLowerCases)
-                    {
-                        this._table.increaseGrade(ch, this._statistics.LetterAppearancesSorted[i].Key, 1);
-                    }
-                }
-            }
-            refreshTable();
-        }
         public void addTriGrams()
         {
             WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
-            for (int i = 0; i < 25; i++)
+            int size = Math.Min(25, this._statistics.TrigramsSorted.Count());
+            for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonTriGrams)
                 {
@@ -163,7 +159,8 @@ namespace cipher
         {
             String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them" ,"just"};
             WordMatch match = null;
-            for (int i = 0; i < 60; i++)
+            int size = Math.Min(60, this._statistics.FourLetterWordsSorted.Count);
+            for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonWords)
                 {
@@ -196,6 +193,7 @@ namespace cipher
                 useWordMatch(match);
             }
             refreshTable();
+            int size = Math.Min(25, this._statistics.ThreeLetterWordsSorted.Count());
             for (int i = 2; i < 25; i++)
             {
                 foreach (String word in commonWords)
@@ -230,9 +228,48 @@ namespace cipher
                 this._table.increaseGrade(kvp.Key, kvp.Value,grade);
             }
         }
+        public void addTwoLetterWords()
+        {
+            String[] commonWords = { "of", "to", "in", "it", "is", "be", "as", "at", "so", "we", "he", "by", "or", "on", "do", "if", "me", "my", "up", "an", "go", "no", "us", "am" }; 
+            WordMatch match = null;
+            int size = Math.Min(5, this._statistics.TwoLetterWordsSorted.Count());
+            //finding "to"
+            for (int i = 0; i < size; i++)
+            {
+                match = new WordMatch("to", this._statistics.TwoLetterWordsSorted[i].Key, _encryptionKey);
+                if (match.MatchPrecentage == 50)
+                {
+                    useWordMatch(match);
+                    break;
+                }
+            }
+            //finding "of"
+            for (int i = 0; i < size; i++)
+            {
+                match = new WordMatch("of", this._statistics.TwoLetterWordsSorted[i].Key, _encryptionKey);
+                if (match.MatchPrecentage == 50)
+                {
+                    useWordMatch(match);
+                    break;
+                }
+            }
+            size = Math.Min(15, this._statistics.TwoLetterWordsSorted.Count());
+            foreach (String str in commonWords){
+                for (int i = 0; i < size; i++)
+                {
+                    match = new WordMatch(str, this._statistics.TwoLetterWordsSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage == 50)
+                    {
+                        insertMatchToTable(match, 1);
+                    }
+                }
+            }
+            refreshTable();
+
+        }
         /**
          * encrpte two letter words
-         */
+         *//*
         public void encrypeTwoLetterWord()
         {
             String mostCommon = this._statistics.TwoLetterWordsSorted[0].Key;
@@ -279,7 +316,7 @@ namespace cipher
                         this._table.increaseGrade((rightWord.Subs.ElementAt(i)).Key, (rightWord.Subs.ElementAt(i)).Value, 1);
                 }
                 
-            }*/
+            }
             for (int i = 2; i < 9; i++)//8 top two letters 
             {
                 String word = this._statistics.TwoLetterWordsSorted[i].Key;
@@ -309,7 +346,7 @@ namespace cipher
             refreshTable();
         }
 
-
+        */
         /**
          * returns the key by its value
          */ 
