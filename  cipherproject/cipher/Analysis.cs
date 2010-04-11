@@ -66,7 +66,8 @@ namespace cipher
             for (int i = 2; i < 10; i++)
             {
                 this._table.increaseGrade(freqArr[i-2], this._statistics.LetterAppearancesSorted[i].Key, 1);
-            }    
+            }
+            refreshTable();
         }
 
         /**
@@ -163,7 +164,7 @@ namespace cipher
         {
             WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
-            int size = Math.Min(30, this._statistics.TrigramsSorted.Count());
+            int size = Math.Min(20, this._statistics.TrigramsSorted.Count());
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonTriGrams)
@@ -171,8 +172,10 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.TrigramsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
+                        /*
                         useWordMatch(match);
-                        refreshTable();
+                         */
+                        insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
                     {
@@ -223,7 +226,7 @@ namespace cipher
                 useWordMatch(match);
             }
             refreshTable();
-            int size = Math.Min(30, this._statistics.ThreeLetterWordsSorted.Count());
+            int size = Math.Min(20, this._statistics.ThreeLetterWordsSorted.Count());
             for (int i = 2; i < size; i++)
             {
                 foreach (String word in commonWords)
@@ -231,7 +234,8 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.ThreeLetterWordsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                        useWordMatch(match);
+                        //useWordMatch(match);
+                        insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
                     {
@@ -239,6 +243,7 @@ namespace cipher
                     }
                 }
             }
+            refreshTable();
         }
 
         private void useWordMatch(WordMatch match)
@@ -297,87 +302,6 @@ namespace cipher
             refreshTable();
 
         }
-        /**
-         * encrpte two letter words
-         *//*
-        public void encrypeTwoLetterWord()
-        {
-            String mostCommon = this._statistics.TwoLetterWordsSorted[0].Key;
-            String secondCommon = this._statistics.TwoLetterWordsSorted[1].Key;
-            if (getKeyByValue(this._encryptionKey,mostCommon[0]) == 't')
-            {
-                this._encryptionKey.Add('o', mostCommon[1]);
-                this._remainingLetters.Remove(mostCommon[1]);
-                this._table.removeLetterList('o');
-                if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 'o')
-                    this._encryptionKey.Add('f', secondCommon[1]);
-                    this._remainingLetters.Remove(secondCommon[1]);
-                    this._table.removeLetterList('f');
-            }
-            else if (getKeyByValue(this._encryptionKey, mostCommon[0]) == 'o')
-            {
-                this._encryptionKey.Add('f', mostCommon[1]);
-                this._remainingLetters.Remove(mostCommon[1]);
-                this._table.removeLetterList('f');
-                if (getKeyByValue(this._encryptionKey, secondCommon[0]) == 't')
-                    this._encryptionKey.Add('o', secondCommon[1]);
-                    this._remainingLetters.Remove(secondCommon[1]);
-                    this._table.removeLetterList('o');
-            }
-            refreshTable();
-            String[] freqArr = { "in", "it", "is", "be", "as", "at", "so", "we"};
-            /*for (int i = 0; i < 6; i++)
-            {
-
-                for (int j = 0; j < freqArr.Length; j++)
-                {
-                    float maxPrec = 0;
-                    WordMatch w = new WordMatch(this._statistics.TwoLetterWordsSorted[i].Key, freqArr[j], _encryptionKey);
-                    float precentage = w.MatchPrecentage;
-                    if (precentage > maxPrec)
-                    {
-                        maxPrec = precentage;
-                        rightWord = w;
-                    }
-                }
-                for (int k = 0; k < rightWord.Subs.Count; k++)
-                {
-                    if(!this._encryptionKey.ContainsKey(rightWord.Subs.ElementAt(i).Key))
-                        this._table.increaseGrade((rightWord.Subs.ElementAt(i)).Key, (rightWord.Subs.ElementAt(i)).Value, 1);
-                }
-                
-            }
-            for (int i = 2; i < 9; i++)//8 top two letters 
-            {
-                String word = this._statistics.TwoLetterWordsSorted[i].Key;
-                if (this._encryptionKey.ContainsValue(word[0]))
-                {
-                    for (int j = 0; j < 8; j++)
-                    {          
-                        if (this.getKeyByValue(this._encryptionKey,word[0]) == freqArr[j][0])
-                        {
-                            this._table.increaseGrade(freqArr[j][1], word[1], 1);
-                        }
-                    }
-
-                }
-                if (this._encryptionKey.ContainsValue(word[1]))
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (this.getKeyByValue(this._encryptionKey, word[1]) == freqArr[j][1])
-                        {
-                            this._table.increaseGrade(freqArr[j][0], word[0], 1);
-                        }
-                    }
-
-                }
-            }
-            refreshTable();
-        }
-
-
-
 
         /**
          * prints the substitutions
@@ -497,32 +421,7 @@ namespace cipher
                 Console.WriteLine("file does not exist");
             }
         }
-        public void fillPossibilities()
-        {
-            for (int i = 0; i < _remainingLetters.Count; i++)
-            {
-                char letter = '?';
-                KeyValuePair<char, int> tKvp = new KeyValuePair<char, int>('?', 0);
-                //foreach (KeyValuePair<char, SortedList<char, int>> outter in this._table.Table)
-                for (int j = 0;j < this._table.Table.Count;j++)
-                {
-                  //  foreach (KeyValuePair<char, int> inner in outter.Value)
-                    SortedList<char,int> tList = this._table.Table.ElementAt<KeyValuePair<char,SortedList<char,int>>>(j).Value;
-                    for (int n = 0; n < tList.Count;n++)
-                    {
-                        KeyValuePair<char,int> tPair = tList.ElementAt<KeyValuePair<char,int>>(n);
-                        if (tPair.Value > tKvp.Value)
-                        {
-                            tKvp = tPair;
-                            letter = this._table.Table.ElementAt<KeyValuePair<char,SortedList<char,int>>>(j).Key;
-                            this._encryptionKey[letter] = tKvp.Key;
-                            this._remainingLetters.Remove(letter);
-                            refreshTable() ;
-                        }
-                    }
-                }
-            }
-        }
+
 
 
         /**
@@ -754,16 +653,16 @@ namespace cipher
                     {
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
-                        if (this._encryptionKey.ContainsValue(firstLetter1))
-                        //&& 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                        // && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
+                        if (this._encryptionKey.ContainsValue(firstLetter1)
+                        && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
+                         && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             this._table.increaseGrade(upperCase, firstLetter2, 2);
                         }
-                        else if (this._encryptionKey.ContainsValue(firstLetter2))
-                        // && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                        //&& this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
+                        else if (this._encryptionKey.ContainsValue(firstLetter2)
+                         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
+                        && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             this._table.increaseGrade(upperCase, firstLetter1, 2);
@@ -787,16 +686,16 @@ namespace cipher
                     if( word1.Substring(word1.Length-3,3) == word2.Substring(word2.Length-3,3)){
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
-                        if (this._encryptionKey.ContainsValue(firstLetter1))
-                            //&& 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                           // && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
+                        if (this._encryptionKey.ContainsValue(firstLetter1)
+                            && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
+                            && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                          {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char,char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             this._table.increaseGrade(upperCase, firstLetter2, 1);
                          }
-                        else if (this._encryptionKey.ContainsValue(firstLetter2))
-                        // && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                         //&& this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
+                        else if (this._encryptionKey.ContainsValue(firstLetter2)
+                         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
+                         && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             this._table.increaseGrade(upperCase, firstLetter1, 1);
@@ -820,20 +719,18 @@ namespace cipher
                     {
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
-                        if (this._encryptionKey.ContainsValue(firstLetter1))
-                       //  && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                       //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
+                        if (this._encryptionKey.ContainsValue(firstLetter1)
+                         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
+                         && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
-                            //this._encryptionKey[upperCase] = firstLetter2; 
                             this._table.increaseGrade(upperCase, firstLetter2, 1);
                         }
-                        else if (this._encryptionKey.ContainsValue(firstLetter2))
-                       //  && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                        // && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
+                        else if (this._encryptionKey.ContainsValue(firstLetter2)
+                         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
+                         && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
-                            //this._encryptionKey[upperCase] = firstLetter1;
                             this._table.increaseGrade(upperCase, firstLetter1, 1);
                         }
                     }
