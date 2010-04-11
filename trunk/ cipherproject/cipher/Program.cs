@@ -118,6 +118,11 @@ namespace cipher
                 test.addTriGrams();
                 test.addBiGrams();
                 test.addFourLetterWords();
+                test.encrypteByMaxPossibilities();//encrypte the small letters
+                test.add6LetterWordUpper();
+                test.add5LetterWordUpper();
+                test.add4LetterWordUpper();
+                test.add3LetterWordUpper();
               //  test.addRemainingFreq();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                // test.encrypteByPossibilities();
