@@ -119,19 +119,22 @@ namespace cipher
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
-                Console.WriteLine("your grade is: {0}", test.calcGrade("The Wonderful Wizard of OZ.txt.key.txt", test.printKey()));
+                Console.WriteLine("your grade is: {0}", test.calcGrade("The Shadow Line.txt.key.txt", test.printKey()));
                 // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
                 test.printMisMatches(fileName.Substring(0,fileName.Length - 11) + ".key.txt", test.printKey());
-                
+                TextWriter tw = new StreamWriter(fileName + "_key.txt");
+                tw.Write(test.printKey());
+                tw.Flush();
+                tw.Close();
             }
             catch (IOException)
             {
                 Console.WriteLine("file does not exist");
             }
-            catch (IndexOutOfRangeException)
-            {
-                Console.WriteLine("mising argument\n");
-            }
+      //      catch (IndexOutOfRangeException)
+       ////     {
+        //        Console.WriteLine("mising argument\n");
+         //   }
         }
 
 

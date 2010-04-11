@@ -49,7 +49,9 @@ namespace cipher
 
         private String _filename;
 //----------------------getters------------------------------------------------
-        
+
+
+
         public List<StringIntPair> FourLetterWordsSorted
         {
             get { return _fourLetterWordsSorted; }
@@ -125,6 +127,7 @@ namespace cipher
             this._quadGramsSorted = new List<StringIntPair>();
             this._fourLetterWords = new SortedList<string, int>();
             this._fourLetterWordsSorted = new List<StringIntPair>();
+
             initStatistics(this._filename);
         }
 
@@ -147,13 +150,9 @@ namespace cipher
             foreach (String sentense in sentenses)
             {
                 String[] words = sentense.Split(wordDelim, StringSplitOptions.RemoveEmptyEntries);
-                    if (checkIfLetter(words[0][0]))
+                    if (words.Length > 0 && checkIfLetter(words[0][0]))
                     {
-                        if (words[0][0] == 'b' || words[0][0] == 'a')
-                        {
-        //                    Console.WriteLine("pause\n{0}\n{1}",sentense[0],sentense[sentense.Length-1]);
-                        }
-                    if (this._possiblyCapital.ContainsKey(words[0][0]))
+                     if (this._possiblyCapital.ContainsKey(words[0][0]))
                     {
                         this._possiblyCapital[words[0][0]]++;
                     }
@@ -176,6 +175,7 @@ namespace cipher
                     fourLetterWordsCheck(word);
                 }
             }
+            tr.Close();
             //sort all the statistics by appearances
             this._twoLetterWordsSorted = sortByValue(this._twoLetterWords);
             this._letterAppearancesSorted = this.sortByValue(this._letterAppearances);
@@ -187,7 +187,6 @@ namespace cipher
             this._trigramsSorted = sortByValue(this._trigrams);
             this._doubleLettersSorted = sortByValue(this._doubleLetters);
             this._quadGramsSorted = sortByValue(this._quadGrams);
-            this._fourLetterWordsSorted = sortByValue(this._fourLetterWords);
         }
         private void checkLast3Letters(String word)
         {
