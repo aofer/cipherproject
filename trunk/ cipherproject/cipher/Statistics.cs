@@ -187,6 +187,7 @@ namespace cipher
             this._trigramsSorted = sortByValue(this._trigrams);
             this._doubleLettersSorted = sortByValue(this._doubleLetters);
             this._quadGramsSorted = sortByValue(this._quadGrams);
+            this._fourLetterWordsSorted = sortByValue(this._fourLetterWords);
         }
         private void checkLast3Letters(String word)
         {
