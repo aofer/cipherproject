@@ -102,7 +102,7 @@ namespace cipher
 
         public void addBiGrams()
         {
-            String[] commonBiGrams = {"th","he","in","er","an","re","nd","on","en","at","ou","ed","ha","to","or","it","is","hi","as","ng"};
+            String[] commonBiGrams = {"th","he","in","er","an","re","nd","on","en","at","ou","ed","ha","to","or","it","is","hi","as","ng","ve"};
             WordMatch match = null;
             foreach (String word in commonBiGrams)
             {
@@ -129,6 +129,23 @@ namespace cipher
             {
                 useWordMatch(match);
             }
+            String[] commonEndings = { "ing", "hat", "ere", "gth", "ted", "ith", "red", "ent", "ion", "aid", "nce", "ter", "uld", "ess", "ore", "ave", "ver", "rom", "ned", "hen", "ick" };
+            int size = Math.Min(20, this._statistics.LastThreeLettersSorted.Count());
+            foreach (String str in commonEndings)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    match = new WordMatch(str, this._statistics.LastThreeLettersSorted[i].Key, _encryptionKey);
+                    if (match.MatchPrecentage > 50)
+                    {
+                        useWordMatch(match);
+                    }
+                    else if (match.MatchPrecentage > 0)
+                    {
+                        insertMatchToTable(match, 1);
+                    }
+                }
+            }
             refreshTable();
         }
 
@@ -136,7 +153,7 @@ namespace cipher
         {
             WordMatch match = null;
             String[] commonTriGrams = { "hat", "and","tha","ent","ion","tio","for","nde","has","nce","edt","tis","oft","sth","men","you","wit","thi","all","was","ver" };
-            int size = Math.Min(25, this._statistics.TrigramsSorted.Count());
+            int size = Math.Min(30, this._statistics.TrigramsSorted.Count());
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonTriGrams)
@@ -157,9 +174,10 @@ namespace cipher
         }
         public void addFourLetterWords()
         {
-            String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them" ,"just"};
+            String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them" ,"just","very","that", "with", "have", "this", "will", "your", "from", "they", "know", "want", "been",
+                                       "good", "time", "when", "come", "here","long","many", "more", "only", "over", "than","well", "were" };
             WordMatch match = null;
-            int size = Math.Min(60, this._statistics.FourLetterWordsSorted.Count);
+            int size = Math.Min(40, this._statistics.FourLetterWordsSorted.Count);
             for (int i = 0; i < size; i++)
             {
                 foreach (String word in commonWords)
@@ -181,7 +199,9 @@ namespace cipher
         {
             String encryptedThe = this._statistics.ThreeLetterWordsSorted[0].Key;
             String encryptedAnd = this._statistics.ThreeLetterWordsSorted[1].Key;
-            String[] commonWords = {"for","are","but","not","you","all","any","can","had","her","was","one","our","out","has","him" };
+            String[] commonWords = {"for","are","but","not","you","all","any","can","had","her","was","one","our","out","has","him",
+                                       "the","and","day","get","his","how","man","new","now","old","see","two","way","who","boy","did"
+                                       ,"its", "let", "put", "say", "she", "too", "use"  };
             WordMatch match = new WordMatch("the", encryptedThe, _encryptionKey);
             foreach (KeyValuePair<char, char> kvp in match.Subs)
             {
@@ -193,8 +213,8 @@ namespace cipher
                 useWordMatch(match);
             }
             refreshTable();
-            int size = Math.Min(25, this._statistics.ThreeLetterWordsSorted.Count());
-            for (int i = 2; i < 25; i++)
+            int size = Math.Min(30, this._statistics.ThreeLetterWordsSorted.Count());
+            for (int i = 2; i < size; i++)
             {
                 foreach (String word in commonWords)
                 {
@@ -253,7 +273,7 @@ namespace cipher
                     break;
                 }
             }
-            size = Math.Min(15, this._statistics.TwoLetterWordsSorted.Count());
+            size = Math.Min(30, this._statistics.TwoLetterWordsSorted.Count());
             foreach (String str in commonWords){
                 for (int i = 0; i < size; i++)
                 {
