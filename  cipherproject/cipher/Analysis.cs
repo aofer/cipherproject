@@ -43,6 +43,16 @@ namespace cipher
                 this._remainingLetters.Add(c);
         }
 
+        public String printTempkey()
+        {
+            String res = "";
+            foreach (KeyValuePair<char, char> kvp in _encryptionKey)
+            {
+                res = res + "real: " + kvp.Key + "  encrypted: " + kvp.Value + "\n" ;
+            }
+            return res;
+        }
+
         /**
          * adding letters to the possiblilities table by their frequency
          */
@@ -366,20 +376,7 @@ namespace cipher
             refreshTable();
         }
 
-        */
-        /**
-         * returns the key by its value
-         */ 
-        public char getKeyByValue(SortedList<char, char>  lst,char c){
-            int index = lst.IndexOfValue(c);
-            //bug fix
-          /*  if (index == -1)
-            {
-                return '?';
-            }*/
 
-            return lst.ElementAt<KeyValuePair<char, char>>(index).Key;
-        }
 
 
         /**
@@ -605,6 +602,7 @@ namespace cipher
                 }
                 this._encryptionKey[letter] = tMax.Key;
                 this._remainingLetters.Remove(tMax.Key);
+                this._encryptionKey.Remove('?');
                 refreshTable();
             }
         }
@@ -722,16 +720,16 @@ namespace cipher
                     {
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
-                        if (this._encryptionKey.ContainsValue(firstLetter1))
-                        //&& 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                        // && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
+                        if (this._encryptionKey.ContainsValue(firstLetter1)
+                        && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
+                        && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             this._table.increaseGrade(upperCase, firstLetter2, 2);
                         }
-                        else if (this._encryptionKey.ContainsValue(firstLetter2))
-                        // && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                        //&& this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
+                        else if (this._encryptionKey.ContainsValue(firstLetter2)
+                         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
+                        && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             this._table.increaseGrade(upperCase, firstLetter1, 2);
@@ -740,6 +738,7 @@ namespace cipher
 
                 }
             }
+            refreshTable();
         }
 
 
@@ -773,6 +772,7 @@ namespace cipher
 
                 }
             }
+            refreshTable();
         }
 
 
@@ -805,6 +805,7 @@ namespace cipher
 
                 }
             }
+            refreshTable();
         }
 
         public void add3LetterWordUpper()
@@ -839,6 +840,7 @@ namespace cipher
 
                 }
             }
+            refreshTable();
         }
 
     }

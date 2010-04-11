@@ -140,22 +140,28 @@ namespace cipher
                 test.addTriGrams();
                 test.addBiGrams();
                 test.addFourLetterWords();
+
+                Console.WriteLine(test.Table.ToString());
+                Console.ReadLine();
                 test.encrypteByMaxPossibilities();//encrypte the small letters
+
+
                 test.add6LetterWordUpper();
                 test.add5LetterWordUpper();
                 test.add4LetterWordUpper();
-               // test.add3LetterWordUpper();
-              //  test.addRemainingFreq();
+                test.add3LetterWordUpper();
                 Console.WriteLine("The table is : \n {0}", test.Table.ToString());
                // test.encrypteByPossibilities();
                 test.encrypteByMaxPossibilities();
                 //  test.fillPossibilities();
+                Console.WriteLine("temp key is:");
+                Console.WriteLine(test.printTempkey());
                 test.randomFill();
                 Console.WriteLine("subs are: \n{0}", test.printSubstitutions());
                 Console.WriteLine("The key is : \n {0}", test.printKey());
                 Console.WriteLine("key length is: {0}", test.EncryptionKey.Count);
                 Console.WriteLine("your grade is: {0}", test.calcGrade(fileName.Substring(0, fileName.Length - 11) + ".key.txt", test.printKey()));
-                // Console.WriteLine("the key of C is {0}", test.getKeyByValue(test.EncryptionKey,'C'));
+                test.printMissingLetter();
                 test.printMisMatches(fileName.Substring(0,fileName.Length - 11) + ".key.txt", test.printKey());
                 TextWriter tw = new StreamWriter(fileName + "_key.txt");
                 tw.Write(test.printKey());
