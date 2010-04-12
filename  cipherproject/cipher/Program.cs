@@ -130,8 +130,13 @@ namespace cipher
 
 
                 Analysis test = new Analysis(c);
+
+
                 test.addLetterFreq();
                 test.addOneLetterWord();
+                //
+                test.mostPossibleLetter(test.Table.Table['a']);
+                //
                 //test.encrypeTwoLetterWord();
                 test.addTwoLetterWords();
                 test.add3LastLetters();

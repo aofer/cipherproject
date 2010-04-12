@@ -77,15 +77,20 @@ namespace cipher
         {
             if (this._statistics.OneLetterWordsSorted.Count() > 0)
             {
-                this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
+                /*this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
                 this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
                 this._table.removeLetterList('a'); //remove the posibilities for letter a
+                */
+                this._table.increaseGrade('a', this._statistics.OneLetterWordsSorted[0].Key[0], 2);
             }
             if (this._statistics.OneLetterWordsSorted.Count() > 1)
             {
+                /*
                 this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
                 this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
                 this._table.removeLetterList('I');
+                 * */
+                this._table.increaseGrade('I', this._statistics.OneLetterWordsSorted[1].Key[0], 2);
             }
             if (this._statistics.OneLetterWordsSorted.Count() > 1)
             {
