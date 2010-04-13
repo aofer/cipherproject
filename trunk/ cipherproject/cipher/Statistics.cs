@@ -55,26 +55,33 @@ namespace cipher
         private SortedList<String, int> _sevenLetterWords;
         private List<StringIntPair> _sevenLetterWordsSorted;
 
+        private SortedList<String, int> _eightLetterWords;
+        private List<StringIntPair> _eightLetterWordsSorted;
+
        
 
 
         private String _filename;
 //----------------------getters------------------------------------------------
+
+        public List<StringIntPair> EightLetterWordsSorted
+        {
+            get { return _eightLetterWordsSorted; }
+        }
+
+        
         public List<StringIntPair> SevenLetterWordsSorted
         {
             get { return _sevenLetterWordsSorted; }
-            set { _sevenLetterWordsSorted = value; }
         }
         public List<StringIntPair> SixLetterWordsSorted
         {
             get { return _sixLetterWordsSorted; }
-            set { _sixLetterWordsSorted = value; }
         }
 
         public List<StringIntPair> FiveLetterWordsSorted
         {
             get { return _fiveLetterWordsSorted; }
-            set { _fiveLetterWordsSorted = value; }
         }
 
         public List<StringIntPair> FourLetterWordsSorted
@@ -158,6 +165,8 @@ namespace cipher
             this._sixLetterWordsSorted = new List<StringIntPair>();
             this._sevenLetterWords = new SortedList<string, int>();
             this._sevenLetterWordsSorted = new List<StringIntPair>();
+            this._eightLetterWords = new SortedList<string, int>();
+            this._eightLetterWordsSorted = new List<StringIntPair>();
 
 
             initStatistics(this._filename);
@@ -208,6 +217,7 @@ namespace cipher
                     fiveLetterWordsCheck(word);
                     sixLetterWordsCheck(word);
                     sevenLetterWordsCheck(word);
+                    eightLetterWordsCheck(word);
                 }
             }
             tr.Close();
@@ -226,6 +236,7 @@ namespace cipher
             this._fiveLetterWordsSorted = sortByValue(this._fiveLetterWords);
             this._sixLetterWordsSorted = sortByValue(this._sixLetterWords);
             this._sevenLetterWordsSorted = sortByValue(this._sevenLetterWords);
+            this._eightLetterWordsSorted = sortByValue(this._eightLetterWords);
         }
         private void checkLast3Letters(String word)
         {
@@ -439,6 +450,22 @@ namespace cipher
                 else
                 {
                     this._sevenLetterWords[word]++;
+                }
+            }
+        }
+
+        private void eightLetterWordsCheck(String word)
+        {
+            Regex eightLetterWord = new Regex("^[a-zA-Z]{8}$");
+            if (eightLetterWord.IsMatch(word))
+            {
+                if (!this._eightLetterWords.ContainsKey(word))
+                {
+                    this._eightLetterWords.Add(word, 1);
+                }
+                else
+                {
+                    this._eightLetterWords[word]++;
                 }
             }
         }

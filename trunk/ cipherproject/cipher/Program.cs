@@ -150,13 +150,19 @@ namespace cipher
                 Console.WriteLine(test.Table.ToString());
                 Console.ReadLine();
                 test.encrypteByMaxPossibilities();//encrypte the small letters
+                test.refreshTable();
+                
                 test.add7LetterWordUpper();
                 test.add6LetterWordUpper();
                 test.add5LetterWordUpper();
                 test.add4LetterWordUpper();
                 test.add3LetterWordUpper();
-                Console.WriteLine("The table is : \n {0}", test.Table.ToString());
-               // test.encrypteByPossibilities();
+
+               // Console.WriteLine(test.Table.ToString());
+               // Console.ReadLine();
+                Console.WriteLine("The table is !!!!!!!!!!!!!!!: \n {0}", test.Table.ToString());
+                Console.ReadLine();
+                //test.encrypteByPossibilities();
                 test.encrypteByMaxPossibilities();  
                 //  test.fillPossibilities();
                 Console.WriteLine("temp key is:");
@@ -168,6 +174,7 @@ namespace cipher
                 Console.WriteLine("your grade is: {0}", test.calcGrade(fileName.Substring(0, fileName.Length - 11) + ".key.txt", test.printKey()));
                 test.printMissingLetter();
                 test.printMisMatches(fileName.Substring(0,fileName.Length - 11) + ".key.txt", test.printKey());
+                test.printKeyErrors(test.printKey());
                 TextWriter tw = new StreamWriter(fileName + "_key.txt");
                 tw.Write(test.printKey());
                 tw.Flush();
