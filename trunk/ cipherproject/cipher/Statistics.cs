@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-namespace cipher
+namespace CipherTextAttack
 {
     //this class is used for saving all the statistics required for the text analysis
     public class Statistics

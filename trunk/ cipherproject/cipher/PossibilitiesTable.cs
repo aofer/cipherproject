@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cipher
+namespace CipherTextAttack
 {
     //this class represent the scoring table for the letters
     //by keeping a list of possibilities for each letter we can choose the best match for it.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cipher
+namespace CipherTextAttack
 {
    /* this class will check if a word matches an ecrypted word. 
       both words will have the same length

@@ -8,8 +8,8 @@
     <ProjectGuid>{1D91A56D-3204-4AB0-99A6-330AF39C5E86}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>cipher</RootNamespace>
-    <AssemblyName>cipher</AssemblyName>
+    <RootNamespace>CipherTextAttack</RootNamespace>
+    <AssemblyName>CipherTextAttack</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>

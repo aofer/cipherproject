@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-namespace cipher
+namespace CipherTextAttack
 {
     //this class is the main algroithm for the cipher. it gets the text statistics and analyze the most common
     // words in the text in order to find a match for each letter.
