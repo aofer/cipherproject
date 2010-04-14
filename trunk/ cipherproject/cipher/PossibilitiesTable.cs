@@ -5,11 +5,13 @@ using System.Text;
 
 namespace cipher
 {
+    //this class represent the scoring table for the letters
+    //by keeping a list of possibilities for each letter we can choose the best match for it.
     class PossibilitiesTable
     {
         private SortedList<char, SortedList<char,int>> _table;
 
-
+        //constructor
         public PossibilitiesTable()
         {
             this._table = new SortedList<char,SortedList<char,int>>();
@@ -22,11 +24,13 @@ namespace cipher
                 this._table.Add(i, new SortedList<char, int>());
             }
         }
+        //getter for the table
         public SortedList<char, SortedList<char, int>> Table
         {
             get { return _table; }
             set { _table = value; }
         }
+        //increase or insert a letter possibility with grading into the table
         public void increaseGrade(char letter, char possibleSub, int value)
         {
             if (this._table[letter].ContainsKey(possibleSub)){
@@ -37,17 +41,18 @@ namespace cipher
             }
 
         }
-
+        //removes a possibility from a letter
         public void removeLetter(char letter, char possibleSub)
         {
             this._table[letter].Remove(possibleSub);
         }
-
+        //removes a letter from the table when we already found a match for it.
         public void removeLetterList(char letter)
         {
             this._table[letter] = new SortedList<char, int>();
         }
 
+        //to string method
         public String ToString()
         {
             String res = "";
@@ -69,7 +74,7 @@ namespace cipher
             }
             return res;
         }
-
+        //gets the best possible sub out of the table
         public KeyValuePair<char, int> getBestSub()
         {
             KeyValuePair<char, int> tKvp = new KeyValuePair<char, int>('?', 0);

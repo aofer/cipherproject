@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 namespace cipher
 {
+    //this class is the main algroithm for the cipher. it gets the text statistics and analyze the most common
+    // words in the text in order to find a match for each letter.
     class Analysis
     {
 
@@ -13,6 +15,7 @@ namespace cipher
         private SortedList<char, char> _encryptionKey;
         private List<char> _remainingLetters;
 
+        //-------------getters/setters-----------------------------------------
         public SortedList<char, char> EncryptionKey
         {
             get { return _encryptionKey; }
@@ -23,7 +26,7 @@ namespace cipher
             get { return _table; }
             set { _table = value; }
         }
-
+        //constructor
         public Analysis(Statistics _statistics)
         {
             this._table = new PossibilitiesTable();
@@ -31,6 +34,30 @@ namespace cipher
             this._statistics = _statistics;
             this._remainingLetters = new List<char>();
             initLetters();
+            analyze();
+        }
+        //analayze the statistics and produces a key
+        private void analyze()
+        {
+            addLetterFreq();
+            addOneLetterWord();
+            mostPossibleLetter(this._table.Table['a']);
+            addTwoLetterWords();
+            add3LastLetters();
+            addThreeLetterWords();
+            addDoubleLetters();
+            addTriGrams();
+            addBiGrams();
+            addFourLetterWords();
+            encrypteByMaxPossibilities();//encrypte the lower case letters
+            refreshTable();
+            add7LetterWordUpper();
+            add6LetterWordUpper();
+            add5LetterWordUpper();
+            add4LetterWordUpper();
+            add3LetterWordUpper();
+            encrypteByMaxPossibilities();
+            randomFill();
         }
 
         /**
@@ -43,6 +70,7 @@ namespace cipher
                 this._remainingLetters.Add(c);
         }
 
+        //used for debugging
         public String printTempkey()
         {
             String res = "";
@@ -77,19 +105,10 @@ namespace cipher
         {
             if (this._statistics.OneLetterWordsSorted.Count() > 0)
             {
-                /*this._encryptionKey.Add('a', this._statistics.OneLetterWordsSorted[0].Key[0]);
-                this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[0].Key[0]);
-                this._table.removeLetterList('a'); //remove the posibilities for letter a
-                */
                 this._table.increaseGrade('a', this._statistics.OneLetterWordsSorted[0].Key[0], 2);
             }
             if (this._statistics.OneLetterWordsSorted.Count() > 1)
             {
-                /*
-                this._encryptionKey.Add('I', this._statistics.OneLetterWordsSorted[1].Key[0]);
-                this._remainingLetters.Remove(this._statistics.OneLetterWordsSorted[1].Key[0]);
-                this._table.removeLetterList('I');
-                 * */
                 this._table.increaseGrade('I', this._statistics.OneLetterWordsSorted[1].Key[0], 2);
             }
             if (this._statistics.OneLetterWordsSorted.Count() > 1)
@@ -98,11 +117,10 @@ namespace cipher
             }
             refreshTable();  
         }
+        //add the most common double letter combinations to the table
         public void addDoubleLetters()
         {
             String doubleL = this._statistics.DoubleLettersSorted[0].Key;
-        //    this._encryptionKey['l'] = doubleL[0];
-          //  this._remainingLetters.Remove(doubleL[0]);
             this._table.increaseGrade('l', doubleL[0], 4);
             refreshTable();
             char[] commonDoubles = { 'l', 'e', 'o', 't', 's', 'r', 'p', 'f', 'n', 'd', 'g', 'm' };
@@ -116,7 +134,7 @@ namespace cipher
             }
             refreshTable();
         }
-
+        //add the most common biGrams to the table
         public void addBiGrams()
         {
             String[] commonBiGrams = {"th","he","in","er","an","re","nd","on","en","at","ou","ed","ha","to","or","it","is","hi","as","ng","ve"};
@@ -137,14 +155,13 @@ namespace cipher
             refreshTable();
 
         }
-
+        //add the most commong 3 letter endings to the table
         public void add3LastLetters()
         {
             String tIng = this._statistics.LastThreeLettersSorted[0].Key;
             WordMatch match = new WordMatch("ing", tIng, _encryptionKey);
             foreach (KeyValuePair<char, char> kvp in match.Subs)
             {
-                //useWordMatch(match); Liron changed
                 insertMatchToTable(match, 2);
             }
             String[] commonEndings = { "ing", "hat", "ere", "gth", "ted", "ith", "red", "ent", "ion", "aid", "nce", "ter", "uld", "ess", "ore", "ave", "ver", "rom", "ned", "hen", "ick" };
@@ -156,7 +173,6 @@ namespace cipher
                     match = new WordMatch(str, this._statistics.LastThreeLettersSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                        //useWordMatch(match);
                         insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 0)
@@ -167,7 +183,7 @@ namespace cipher
             }
             refreshTable();
         }
-
+        //add the most common TriGrams to the table
         public void addTriGrams()
         {
             WordMatch match = null;
@@ -180,8 +196,6 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.TrigramsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-
-                       // useWordMatch(match);
                         insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
@@ -192,6 +206,7 @@ namespace cipher
             }
             refreshTable();
         }
+        //analyze the  most common four letter words and add gradings to the table
         public void addFourLetterWords()
         {
             String[] commonWords = { "make", "like", "take", "such", "much", "from", "some", "them", "just", "very", "that", "with" };
@@ -204,7 +219,6 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.FourLetterWordsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 70)
                     {
-                        //useWordMatch(match); Liron changed
                         insertMatchToTable(match, 3);
                     }
                     else if (match.MatchPrecentage > 0){
@@ -215,6 +229,7 @@ namespace cipher
             refreshTable();
 
         }
+        //analyze the  most common three letter words and add gradings to the table
         public void addThreeLetterWords()
         {
             String encryptedThe = this._statistics.ThreeLetterWordsSorted[0].Key;
@@ -240,7 +255,6 @@ namespace cipher
                     match = new WordMatch(word, this._statistics.ThreeLetterWordsSorted[i].Key, _encryptionKey);
                     if (match.MatchPrecentage > 50)
                     {
-                       // useWordMatch(match);
                         insertMatchToTable(match, 2);
                     }
                     else if (match.MatchPrecentage > 30)
@@ -251,7 +265,7 @@ namespace cipher
             }
             refreshTable();
         }
-
+        //iteretes over the match substitutions list and puts the letters in the key
         private void useWordMatch(WordMatch match)
         {
             foreach (KeyValuePair<char,char> kvp in match.Subs)
@@ -261,7 +275,7 @@ namespace cipher
 
             }
         }
-
+        //iterates over the match substitutions and insert gradings to the table
         private void insertMatchToTable(WordMatch match,int grade)
         {
             foreach (KeyValuePair<char,char> kvp in match.Subs)
@@ -269,6 +283,7 @@ namespace cipher
                 this._table.increaseGrade(kvp.Key, kvp.Value,grade);
             }
         }
+        //analyze the  most common two letter words and add gradings to the table
         public void addTwoLetterWords()
         {
             String[] commonWords = { "of", "to", "in", "it", "is", "be", "as", "at", "so", "we", "he", "by", "or", "on", "do", "if", "me", "my", "up", "an", "go", "no", "us", "am" }; 
@@ -310,7 +325,7 @@ namespace cipher
         }
 
         /**
-         * prints the substitutions
+         * prints the substitutions, used for debugging
          */ 
         public string printSubstitutions()
         {
@@ -374,7 +389,7 @@ namespace cipher
         }
 
         /**
-         * Calculate our grade
+         * Calculate our grade , used for debugging
          */
         public float calcGrade(String fileName, String key)
         {
@@ -398,7 +413,7 @@ namespace cipher
             }
             return grade;
         }
-        //used for debugging and statistics analysis
+        //used for debugging and statistics analysis, prints all the mismatches
         public void printMisMatches(String fileName,String key)
         {
             try
@@ -431,7 +446,8 @@ namespace cipher
 
 
         /**
-         * fill the encryption key by the possibilities table
+         * fill the encryption key by the possibilities table, from the highest grade to the lowest
+         * old method. not used by this algorithm.
          */
 
         public void encrypteByPossibilities()
@@ -459,7 +475,7 @@ namespace cipher
             }
 
         }
-
+        //gets the given letter's best possible substitution.
         public char mostPossibleLetter(SortedList<char,int> gradingList)
         {
             int maxGrade = 0;
@@ -482,7 +498,7 @@ namespace cipher
             return res;
         }
 
-
+        //fill the encryption key by the possibilities table, from the highest grade to the lowest
         public void encrypteByMaxPossibilities()
         {
             int counter = this._remainingLetters.Count;
@@ -570,7 +586,7 @@ namespace cipher
                 Console.WriteLine("remaining letters still contains: {0}", this._remainingLetters[0]);
             }
         }
-
+        //used for refreshing the table in order to remove letters that were already substituted
         public void refreshTable()
         {
             //foreach (KeyValuePair<char, SortedList<char,int>> kvp in this._table.Table)
@@ -615,7 +631,7 @@ namespace cipher
                 }
             }
         }
-
+        //analyze 8 letter words in order to find capital letters
         public void add8LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.SevenLetterWordsSorted.Count; i++)
@@ -629,16 +645,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                        //    && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                        //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2))
                                 this._table.increaseGrade(upperCase, firstLetter2, 8);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                        //         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                        //       && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1))
@@ -650,7 +662,7 @@ namespace cipher
             }
             refreshTable();
         }
-
+        //analyze 7 letter words in order to find capital letters
         public void add7LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.SevenLetterWordsSorted.Count; i++)
@@ -664,16 +676,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                        //    && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                        //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2))
                                 this._table.increaseGrade(upperCase, firstLetter2, 7);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                        //         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                        //       && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1))
@@ -686,7 +694,7 @@ namespace cipher
             refreshTable();
         }
 
-
+        //analyze 6 letter words in order to find capital letters
         public void add6LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.SixLetterWordsSorted.Count; i++)
@@ -700,16 +708,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                    //    && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                      //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2)) 
                                 this._table.increaseGrade(upperCase, firstLetter2, 2);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                //         && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                 //       && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1)) 
@@ -722,7 +726,7 @@ namespace cipher
             refreshTable();
         }
 
-
+        //analyze 5 letter words in order to find capital letters
         public void add5LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.FiveLetterWordsSorted.Count; i++)
@@ -736,16 +740,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                //        && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                //         && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2)) 
                                 this._table.increaseGrade(upperCase, firstLetter2, 2);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                    //     && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                      //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1)) 
@@ -758,7 +758,7 @@ namespace cipher
             refreshTable();
         }
 
-
+        //analyze 4 letter words in order to find capital letters
         public void add4LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.FourLetterWordsSorted.Count; i++)
@@ -771,16 +771,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                      //      && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                      //      && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                          {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char,char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2)) 
                                 this._table.increaseGrade(upperCase, firstLetter2, 1);
                          }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                       //  && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                       //  && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1)) 
@@ -792,7 +788,7 @@ namespace cipher
             }
             refreshTable();
         }
-
+        //analyze 3 letter words in order to find capital letters
         public void add3LetterWordUpper()
         {
             for (int i = 0; i < this._statistics.ThreeLetterWordsSorted.Count; i++)
@@ -806,16 +802,12 @@ namespace cipher
                         Char firstLetter1 = word1[0];
                         Char firstLetter2 = word2[0];
                         if (this._encryptionKey.ContainsValue(firstLetter1))
-                 //        && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key
-                 //        && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter1)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter2)) 
                                 this._table.increaseGrade(upperCase, firstLetter2, 1);
                         }
                         else if (this._encryptionKey.ContainsValue(firstLetter2))
-                  //       && 'a' < this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key
-                   //      && this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key > 'z')
                         {
                             Char upperCase = char.ToUpper(this._encryptionKey.ElementAt<KeyValuePair<char, char>>(this._encryptionKey.IndexOfValue(firstLetter2)).Key);
                             if (!this._encryptionKey.ContainsValue(firstLetter1)) 

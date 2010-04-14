@@ -5,6 +5,7 @@ using System.Text;
 
 namespace cipher
 {
+    // this class represent a string to int pair, sorted by the int value
     public class StringIntPair : IComparable
     {
         private String theKey;
