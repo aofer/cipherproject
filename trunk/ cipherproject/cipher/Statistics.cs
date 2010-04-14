@@ -133,11 +133,10 @@ namespace cipher
             get { return _letterAppearancesSorted; }
         }
 
-
+        //constructor
 
         public Statistics(String filename)
         {
-            //this._letterFreq = initFreq();
             this._filename = filename;
             this._letterAppearances = new SortedList<char, int>();
             this._letterAppearancesSorted = new List<CharIntPair>();
@@ -173,14 +172,7 @@ namespace cipher
             initStatistics(this._filename);
         }
 
-        public SortedList<char, int> initFreq()
-        {
-            SortedList<char, int> res = new SortedList<char, int>();
-            res['a'] = 80;
-
-            return res;
-        }
-
+        //reads the text in order to get the statistics
         public void initStatistics(String filename)
         {
             
@@ -239,6 +231,7 @@ namespace cipher
             this._sevenLetterWordsSorted = sortByValue(this._sevenLetterWords);
             this._eightLetterWordsSorted = sortByValue(this._eightLetterWords);
         }
+        //insert the last 3 letters of the word into the statistics
         private void checkLast3Letters(String word)
         {
             Regex last3Letters = new Regex("[a-zA-Z]{3}$");
@@ -255,7 +248,7 @@ namespace cipher
                 }
             }
         }
-
+        //insert all the double letters in the statistics
         private void findDoubleLetters(String word)
         {
             if (word.Length >= 2)
@@ -278,6 +271,7 @@ namespace cipher
                 }
             }
         }
+        //find Ngrams in the word
         private String[] findNgrams(String word, int n)
         {
             String[] res = new String[word.Length - (n - 1)];
@@ -287,6 +281,7 @@ namespace cipher
             }
             return res;
         }
+        //find BiGrams
         private void findBiGrams(String word)
         {
             if (word.Length >= 2)
@@ -305,6 +300,7 @@ namespace cipher
                 }
             }
         }
+        //find TriGrams
         private void findTriGrams(String word)
         {
             if (word.Length >= 3)
@@ -323,6 +319,7 @@ namespace cipher
                 }
             }
         }
+        //finds quadGrams
         private void findQuadGrams(String word)
         {
             if (word.Length >= 4)
@@ -360,6 +357,7 @@ namespace cipher
 
 
         }
+        //gets all the two letter words into the statistics
         private void twoLetterWordsCheck(String word)
         {
             Regex twoLetterWord = new Regex("^[a-zA-Z]{2}$");
@@ -376,6 +374,7 @@ namespace cipher
             }
 
         }
+        //gets all the three letter words into the statistics
         private void threeLetterWordsCheck(String word)
         {
             Regex threeLetterWord = new Regex("^[a-zA-Z]{3}$");
@@ -391,6 +390,7 @@ namespace cipher
                     }
                 }
         }
+        //gets all the four letter words into the statistics
         private void fourLetterWordsCheck(String word)
         {
             Regex fourLetterWord = new Regex("^[a-zA-Z]{4}$");
@@ -406,7 +406,7 @@ namespace cipher
                 }
             }
         }
-
+        //gets all the five letter words into the statistics
         private void fiveLetterWordsCheck(String word)
         {
             Regex fiveLetterWord = new Regex("^[a-zA-Z]{5}$");
@@ -422,7 +422,7 @@ namespace cipher
                 }
             }
         }
-
+        //gets all the six letter words into the statistics
         private void sixLetterWordsCheck(String word)
         {
             Regex sixLetterWord = new Regex("^[a-zA-Z]{6}$");
@@ -438,7 +438,7 @@ namespace cipher
                 }
             }
         }
-
+        //gets all the seven letter words into the statistics
         private void sevenLetterWordsCheck(String word)
         {
             Regex sevenLetterWord = new Regex("^[a-zA-Z]{7}$");
@@ -454,7 +454,7 @@ namespace cipher
                 }
             }
         }
-
+        //gets all the eight letter words into the statistics
         private void eightLetterWordsCheck(String word)
         {
             Regex eightLetterWord = new Regex("^[a-zA-Z]{8}$");
@@ -470,6 +470,7 @@ namespace cipher
                 }
             }
         }
+        //get the letter appearances in the text
         private void getLetterAppearances(String word)
         {
             for (int i = 0; i < word.Length; i++)
@@ -490,6 +491,7 @@ namespace cipher
 
             }
         }
+        //print out the keys and values
         public void PrintKeysAndValues(SortedList<char, int> myList)
         {
             foreach (KeyValuePair<char, int> kvp in myList)
@@ -501,7 +503,7 @@ namespace cipher
             Console.WriteLine();
             Console.ReadLine();
         }
-
+        //sort the sortedList by values instead of key and return the result in a List<CharIntPair>
         private List<CharIntPair> sortByValue(SortedList<char, int> list)
         {
             List<CharIntPair> res = new List<CharIntPair>();
@@ -514,6 +516,7 @@ namespace cipher
             return res;
 
         }
+        //sort the sortedList by values instead of key and return the result in a List<StringIntPair>
         private List<StringIntPair> sortByValue(SortedList<String, int> list)
         {
             List<StringIntPair> res = new List<StringIntPair>();
@@ -525,12 +528,10 @@ namespace cipher
             res.Reverse();
             return res;
         }
+        //check if the char ch is a letter
         private bool checkIfLetter(char ch)
         {
             return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-        }
-        private void getNGram(String word,int length){
-
         }
 
     }
