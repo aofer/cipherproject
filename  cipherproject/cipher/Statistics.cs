@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 namespace cipher
 {
+    //this class is used for saving all the statistics required for the text analysis
     public class Statistics
     {
 //-----------------------fields-------------------------------------------------------
