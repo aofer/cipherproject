@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace cipher
+namespace CipherTextAttack
 {
     // this class represent a string to int pair, sorted by the int value
     public class StringIntPair : IComparable
