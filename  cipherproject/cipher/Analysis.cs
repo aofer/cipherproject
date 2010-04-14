@@ -50,6 +50,17 @@ namespace cipher
             addBiGrams();
             addFourLetterWords();
             encrypteByMaxPossibilities();//encrypte the lower case letters
+            //find specifics
+            String[] commonQWords = { "question", "quick", "quite", "quiet","equal","quit","quest","queen","query" };
+            String[] commonJWords = { "jump", "job", "join", "joint", "jumped", "joined", "jail", "jewl", "jaw", "jail", "jig","object","jar","jumpy" };
+            String[] commonXWords = { "axe", "axis", "axial", "exit", "sex", "sexy", "box", "exist", "exists","complex","context","max","fox","sox","tax","text","fix","fixed" };
+            String[] commonZWords = { "zero", "zoo", "zodiac", "zip", "zoom", "lazy", "hazy", "fuzzy", "blizzard", "quiz", "size", "zone", "maze", "seize", "crazy", "amazing", "dizzy", "dozen" };
+            findSpecific('x', commonXWords);
+            findSpecific('z', commonZWords);
+            findSpecific('q',commonQWords);
+            findSpecific('j', commonJWords);
+            encrypteByMaxPossibilities();//encrypte the lower case letters
+            
             refreshTable();
             add7LetterWordUpper();
             add6LetterWordUpper();
@@ -107,14 +118,14 @@ namespace cipher
             {
                 this._table.increaseGrade('a', this._statistics.OneLetterWordsSorted[0].Key[0], 2);
             }
-            if (this._statistics.OneLetterWordsSorted.Count() > 1)
+        /*    if (this._statistics.OneLetterWordsSorted.Count() > 1)
             {
                 this._table.increaseGrade('I', this._statistics.OneLetterWordsSorted[1].Key[0], 2);
             }
             if (this._statistics.OneLetterWordsSorted.Count() > 1)
             {
                 this._table.increaseGrade('A', this._statistics.OneLetterWordsSorted[2].Key[0], 1);
-            }
+            }*/
             refreshTable();  
         }
         //add the most common double letter combinations to the table
@@ -206,6 +217,90 @@ namespace cipher
             }
             refreshTable();
         }
+ 
+
+        public void findSpecific(char letter,String[] commonWords)
+        {
+            if (!this._encryptionKey.ContainsKey(letter))
+            {
+                foreach (String word in commonWords)
+                {
+                    if (word.Length == 3)
+                    {
+                        foreach (StringIntPair pair in _statistics.ThreeLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                    else if (word.Length == 4)
+                    {
+                        foreach (StringIntPair pair in _statistics.FourLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                    else if (word.Length == 5)
+                    {
+                        foreach (StringIntPair pair in _statistics.FiveLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                    else if (word.Length == 6)
+                    {
+                        foreach (StringIntPair pair in _statistics.SixLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                    else if (word.Length == 7)
+                    {
+                        foreach (StringIntPair pair in _statistics.SevenLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                    else if (word.Length == 8)
+                    {
+                        foreach (StringIntPair pair in _statistics.EightLetterWordsSorted)
+                        {
+                            WordMatch match = new WordMatch(word, pair.Key, _encryptionKey);
+                            if (match.MatchPrecentage > 0)
+                            {
+                                insertMatchToTable(match, 5);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         //analyze the  most common four letter words and add gradings to the table
         public void addFourLetterWords()
         {
